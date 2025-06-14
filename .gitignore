@@ -2,3 +2,6 @@ node_modules/
 .next/ 
 rentaprint.zip 
 .env.local 
+
+# clerk configuration (can include secrets)
+/.clerk/
