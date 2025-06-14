@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Unified global styles */
+html, body {
+  @apply min-h-screen font-sans bg-white text-gray-900 dark:bg-gray-900 dark:text-white;
+}
+
+/* Ensure navbar links are visible in both themes */
+nav a {
+  @apply text-gray-900 dark:text-white;
+}
