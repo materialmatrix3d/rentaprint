@@ -4,11 +4,12 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import Link from 'next/link';
+import type { Printer } from '@/lib/data';
 
 export default function PrinterDetailPage() {
   const supabase = createClientComponentClient();
   const { id } = useParams();
-  const [printer, setPrinter] = useState(null);
+  const [printer, setPrinter] = useState<Printer | null>(null);
   const [status, setStatus] = useState('available');
 
   useEffect(() => {

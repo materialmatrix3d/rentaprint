@@ -2,12 +2,11 @@
 
 export interface Printer {
   id: string
-  ownerId: string
+  make_model: string
   name: string
   materials: string[]
-  buildVolume: string
-  pricePerHour: number
-  description: string
+  build_volume: string
+  price_per_hour: number
+  description: string | null
+  status?: string
 }
-
-export const printers: Printer[] = []
