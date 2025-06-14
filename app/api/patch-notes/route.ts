@@ -4,7 +4,8 @@ import { cookies } from 'next/headers'
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
-  const supabase = createRouteHandlerClient({ cookies })
+  const cookieStore = await cookies()
+  const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
 
   try {
     const { data, error } = await supabase
