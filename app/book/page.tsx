@@ -3,12 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import type { Printer } from '@/lib/data';
 
 export default function BookingPage() {
   const { id } = useParams();
   const router = useRouter();
   const supabase = createClientComponentClient();
-  const [printer, setPrinter] = useState(null);
+  const [printer, setPrinter] = useState<Printer | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -44,7 +45,7 @@ export default function BookingPage() {
       alert('Booking failed.');
     } else {
       alert('Booking successful!');
-      router.push('/my-bookings');
+      router.push('/bookings');
     }
   };
 

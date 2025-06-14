@@ -1,6 +1,13 @@
 import Link from 'next/link';
+import type { Printer } from '@/lib/data';
 
-export default function PrinterCard({ printer, onEdit, onDelete }) {
+interface Props {
+  printer: Printer;
+  onEdit?: (printer: Printer) => void;
+  onDelete?: (id: string) => void;
+}
+
+export default function PrinterCard({ printer, onEdit, onDelete }: Props) {
   const statusColors = {
     available: 'bg-green-600',
     pending: 'bg-yellow-500',

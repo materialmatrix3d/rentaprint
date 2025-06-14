@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react';
 import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs';
 import PrinterCard from '@/components/PrinterCard';
+import type { Printer } from '@/lib/data';
 
 export default function PrintersPage() {
-  const [printers, setPrinters] = useState<any[]>([]);
+  const [printers, setPrinters] = useState<Printer[]>([]);
 
   useEffect(() => {
     const fetchPrinters = async () => {
