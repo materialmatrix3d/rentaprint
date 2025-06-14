@@ -25,7 +25,10 @@ export default function BookingsPage() {
   }, [user, supabase]);
 
   const cancelBooking = async (bookingId: string) => {
-    const res = await fetch(`/api/bookings/cancel/${bookingId}`, { method: 'DELETE' });
+    const res = await fetch(`/api/bookings/cancel/${bookingId}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
     if (res.ok) {
       alert("Booking canceled ✅");
       setBookings(bookings.filter(b => b.id !== bookingId));
