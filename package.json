@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "jest"
+    "test": "jest",
+    "sync:patch-notes": "ts-node scripts/sync-patch-notes.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.21.0",
