@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   const { userId } = auth();
-  const supabase = await createClient();
+  const supabase = createClient();
 
   if (!userId) return new Response("Unauthorized", { status: 401 });
 

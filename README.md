@@ -14,7 +14,7 @@
    ```bash
    psql "$SUPABASE_URL" < types/schema.sql
    ```
-   This defines the `bookings` and `patch_notes` tables used by the app.
+   This defines the `bookings`, `patch_notes`, and `reviews` tables used by the app.
 4. Insert some example patch notes so the page isn't empty. Run the sync script
    to upload the notes from `patch_notes.json`:
    ```bash
