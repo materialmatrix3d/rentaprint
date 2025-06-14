@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   const { userId } = auth()
   if (!userId) return new Response('Unauthorized', { status: 401 })
 
-  const supabase = await createClient()
+  const supabase = createClient()
   const { title, description } = await request.json()
 
   if (!title || !description) {
