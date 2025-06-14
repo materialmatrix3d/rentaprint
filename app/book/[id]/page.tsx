@@ -3,12 +3,14 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useUser } from '@clerk/nextjs'
 import type { Printer } from '@/lib/data'
 
 export default function BookingPage() {
   const { id } = useParams()
   const router = useRouter()
   const supabase = createClientComponentClient()
+  const { user } = useUser()
   const [printer, setPrinter] = useState<Printer | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -30,9 +32,6 @@ export default function BookingPage() {
   }, [id])
 
   const handleBooking = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
     if (!user) {
       alert('You must be logged in to book a printer.')
       return
