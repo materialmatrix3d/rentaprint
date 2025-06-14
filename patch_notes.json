@@ -6,5 +6,9 @@
   {
     "title": "Bug fixes",
     "description": "Resolved booking issues and improved printer search."
+  },
+  {
+    "title": "Major updates",
+    "description": "Improved booking cancellation errors, cleaned duplicate components, clarified test instructions, and fixed environment example."
   }
 ]

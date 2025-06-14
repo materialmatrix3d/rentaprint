@@ -32,7 +32,13 @@
 
 ## Running tests
 
-Run the Jest test suite with:
+Install dependencies first to ensure Jest and other dev tools are available:
+
+```bash
+npm install
+```
+
+Then run the test suite with:
 
 ```bash
 npm test
