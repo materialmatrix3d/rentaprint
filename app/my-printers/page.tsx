@@ -86,7 +86,7 @@ export default function MyPrinters() {
             )}
           </div>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            ${printer.price_per_hour}/hr &bull; {printer.build_volume}
+            {printer.price_per_hour}/hr &bull; {printer.build_volume}
           </p>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Materials: {printer.materials?.join(", ")}
