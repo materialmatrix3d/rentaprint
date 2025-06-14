@@ -17,10 +17,20 @@
    psql "$SUPABASE_URL" < types/schema.sql
    ```
    This defines the `bookings` and `patch_notes` tables used by the app.
-4. Start the development server:
- ```bash
-  npm run dev
-  ```
+4. Insert some example patch notes so the page isn't empty:
+   ```sql
+   insert into patch_notes (title, description)
+   values
+     ('Initial release', 'First public version of RentAPrint'),
+     ('Bug fixes', 'Resolved booking issues and improved printer search.');
+   ```
+   Run this SQL in Supabase or `psql` to seed the table. You can also run
+   `npx ts-node scripts/seed-patch-notes.ts` to insert the same records from the
+   command line.
+5. Start the development server:
+   ```bash
+    npm run dev
+    ```
 
 ## Running tests
 

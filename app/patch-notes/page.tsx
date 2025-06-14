@@ -12,6 +12,7 @@ interface PatchNote {
 export default function PatchNotesPage() {
   const [notes, setNotes] = useState<PatchNote[]>([])
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -27,6 +28,8 @@ export default function PatchNotesPage() {
       } catch (err) {
         console.error('Failed to fetch patch notes', err)
         setErrorMsg('Failed to load patch notes')
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -38,6 +41,12 @@ export default function PatchNotesPage() {
       <h1 className="text-3xl font-bold mb-6">📘 Patch Notes</h1>
       {errorMsg && (
         <p className="text-red-500 mb-4">{errorMsg}</p>
+      )}
+      {loading && (
+        <p className="mb-4">Loading patch notes…</p>
+      )}
+      {!loading && notes.length === 0 && !errorMsg && (
+        <p className="mb-4">No patch notes available.</p>
       )}
       {notes.map(note => (
         <div
