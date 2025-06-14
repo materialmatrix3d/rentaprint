@@ -1,6 +1,7 @@
-import { supabase } from './supabase'
+import { createClient } from './supabase/server'
 
 export async function updatePrinterStatus(printerId: string) {
+  const supabase = createClient()
   const today = new Date().toISOString().split('T')[0]
   const { data: bookings } = await supabase
     .from('bookings')
