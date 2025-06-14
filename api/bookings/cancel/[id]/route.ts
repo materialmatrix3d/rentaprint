@@ -1,10 +1,9 @@
 import { auth } from "@clerk/nextjs";
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import { createClient } from "@/lib/supabase/server";
 
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   const { userId } = auth();
-  const supabase = createRouteHandlerClient({ cookies });
+  const supabase = createClient();
 
   if (!userId) return new Response("Unauthorized", { status: 401 });
 
