@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import {
   SignedIn,
@@ -13,7 +13,7 @@ import type { Printer } from "@/lib/data";
 
 export default function MyPrinters() {
   const { user } = useUser();
-  const supabase = createClientComponentClient();
+  const supabase = useMemo(() => createClientComponentClient(), []);
   const [printers, setPrinters] = useState<Printer[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -29,7 +29,7 @@ export default function MyPrinters() {
     };
 
     if (user?.id) fetchPrinters();
-  }, [user, supabase]);
+  }, [user]);
 
   const deletePrinter = async (id: string) => {
     if (!confirm("Delete this printer?")) return;
