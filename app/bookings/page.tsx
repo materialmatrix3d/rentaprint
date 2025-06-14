@@ -43,18 +43,39 @@ export default function BookingsPage() {
         <p className="text-gray-900 dark:text-white">You have no bookings.</p>
       ) : (
         bookings.map((booking) => (
-          <div key={booking.id} className="bg-gray-800 text-gray-900 dark:text-white rounded p-4 mb-4 shadow">
-            <h2 className="text-xl font-semibold text-blue-400">{booking.printers.name}</h2>
-            <p className="text-sm text-gray-400 mb-2">
+          <div
+            key={booking.id}
+            className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white rounded p-4 mb-4 shadow space-y-2"
+          >
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold">{booking.printers.name}</h2>
+              <span
+                className={`text-xs font-semibold px-2 py-1 rounded ${{
+                  pending: 'bg-yellow-400 text-black',
+                  approved: 'bg-green-600 text-gray-900 dark:text-white',
+                  canceled: 'bg-red-600 text-gray-900 dark:text-white',
+                }[booking.status] || 'bg-gray-300 text-black'}`}
+              >
+                {booking.status}
+              </span>
+            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               From {new Date(booking.start_date).toLocaleDateString()} to {new Date(booking.end_date).toLocaleDateString()}
             </p>
-            <span className="bg-yellow-400 text-black text-xs px-2 py-1 rounded mr-4 uppercase">{booking.status}</span>
-            <button
-              onClick={() => cancelBooking(booking.id)}
-              className="bg-red-600 hover:bg-red-700 text-gray-900 dark:text-white px-3 py-1 rounded"
-            >
-              Cancel Booking
-            </button>
+            <div className="flex gap-2 flex-wrap">
+              <a
+                href={`/printers/${booking.printer_id}`}
+                className="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-gray-900 dark:text-white rounded"
+              >
+                View Printer
+              </a>
+              <button
+                onClick={() => cancelBooking(booking.id)}
+                className="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-gray-900 dark:text-white rounded"
+              >
+                Cancel Booking
+              </button>
+            </div>
           </div>
         ))
       )}
