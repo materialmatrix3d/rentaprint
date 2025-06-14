@@ -5,12 +5,10 @@
 ## Setup
 
 1. Install dependencies with `npm install` (Node.js 18 or higher is recommended).
-2. Copy `.env.example` to `.env.local` and provide your Supabase and Clerk keys:
+2. Copy `.env.example` to `.env.local`:
    ```bash
- cp .env.example .env.local
-  ```
-  Edit `.env.local` and replace the placeholder values with the credentials from
-  your Supabase project and Clerk account.
+   cp .env.example .env.local
+   ```
 3. Create the database tables. Run the SQL in `types/schema.sql` against your
    Supabase project using the SQL editor or `psql`:
    ```bash
