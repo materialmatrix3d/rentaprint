@@ -7,3 +7,11 @@ create table if not exists bookings (
   status text default 'pending',
   created_at timestamp with time zone default now()
 );
+
+-- Patch Notes Table
+create table if not exists patch_notes (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  description text not null,
+  created_at timestamp with time zone default now()
+);

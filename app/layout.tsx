@@ -24,7 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <li><Link href="/bookings">My Bookings</Link></li>
                   <li><Link href="/owner">Owner Panel</Link></li>
                   <li><Link href="/my-printers">My Printers</Link></li>
-                  <li><Link href="/patchnotes">Patch Notes</Link></li>
+                  <li><Link href="/patch-notes">Patch Notes</Link></li>
                   <li><Link href="/profile">Profile</Link></li>
                   <li><ThemeToggle /></li>
                   <SignedIn>
