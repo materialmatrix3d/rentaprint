@@ -15,7 +15,7 @@ export default function Navbar() {
         <Link href="/bookings" className="text-black dark:text-white">My Bookings</Link>
         <Link href="/owner" className="text-black dark:text-white">Owner Panel</Link>
         <Link href="/my-printers" className="text-black dark:text-white">My Printers</Link>
-        <Link href="/patchnotes" className="text-black dark:text-white">Patch Notes</Link>
+        <Link href="/patch-notes" className="text-black dark:text-white">Patch Notes</Link>
         <Link href="/profile" className="text-black dark:text-white">Profile</Link>
       </div>
       <div className="flex items-center gap-4">
