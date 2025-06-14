@@ -17,16 +17,14 @@
    psql "$SUPABASE_URL" < types/schema.sql
    ```
    This defines the `bookings` and `patch_notes` tables used by the app.
-4. Insert some example patch notes so the page isn't empty:
-   ```sql
-   insert into patch_notes (title, description)
-   values
-     ('Initial release', 'First public version of RentAPrint'),
-     ('Bug fixes', 'Resolved booking issues and improved printer search.');
+4. Insert some example patch notes so the page isn't empty. Run the sync script
+   to upload the notes from `patch_notes.json`:
+   ```bash
+   npx ts-node scripts/sync-patch-notes.ts
    ```
-   Run this SQL in Supabase or `psql` to seed the table. You can also run
-   `npx ts-node scripts/seed-patch-notes.ts` to insert the same records from the
-   command line.
+   The script reads `patch_notes.json` and inserts any notes that don't already
+   exist in your Supabase database. You can modify the JSON file to add new
+   entries and re-run the script at any time.
 5. Start the development server:
    ```bash
     npm run dev
