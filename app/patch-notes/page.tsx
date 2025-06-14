@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 interface PatchNote {
   id: string
@@ -11,28 +10,35 @@ interface PatchNote {
 }
 
 export default function PatchNotesPage() {
-  const supabase = createClientComponentClient()
   const [notes, setNotes] = useState<PatchNote[]>([])
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchNotes = async () => {
-      const { data, error } = await supabase
-        .from('patch_notes')
-        .select('*')
-        .order('created_at', { ascending: false })
+      try {
+        const res = await fetch('/api/patch-notes')
 
-      if (!error && data) {
-        setNotes(data as PatchNote[])
-      } else {
-        console.error('Failed to fetch patch notes', error)
+        if (!res.ok) {
+          throw new Error('Request failed')
+        }
+
+        const data: PatchNote[] = await res.json()
+        setNotes(data)
+      } catch (err) {
+        console.error('Failed to fetch patch notes', err)
+        setErrorMsg('Failed to load patch notes')
       }
     }
+
     fetchNotes()
   }, [])
 
   return (
     <main className="p-6 max-w-4xl mx-auto text-gray-900 dark:text-white">
       <h1 className="text-3xl font-bold mb-6">📘 Patch Notes</h1>
+      {errorMsg && (
+        <p className="text-red-500 mb-4">{errorMsg}</p>
+      )}
       {notes.map(note => (
         <div
           key={note.id}
