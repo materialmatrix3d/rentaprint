@@ -17,12 +17,15 @@ const patchNotes = [
 
 export default function PatchNotesPage() {
   return (
-    <main className="p-6 max-w-4xl mx-auto">
+    <main className="p-6 max-w-4xl mx-auto text-gray-900 dark:text-white">
       <h1 className="text-3xl font-bold mb-6">📘 Patch Notes</h1>
       {patchNotes.map((patch, idx) => (
-        <div key={idx} className="bg-white rounded-2xl shadow p-6 mb-6 border">
+        <div
+          key={idx}
+          className="bg-white dark:bg-gray-800 rounded-2xl shadow p-6 mb-6 border border-gray-300 dark:border-gray-700"
+        >
           <div className="text-xl font-semibold">{patch.version}</div>
-          <div className="text-sm text-gray-500 mb-3">{patch.date}</div>
+          <div className="text-sm text-gray-500 dark:text-gray-400 mb-3">{patch.date}</div>
           <ul className="list-disc list-inside space-y-1">
             {patch.notes.map((note, i) => (
               <li key={i}>{note}</li>
