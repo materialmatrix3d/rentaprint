@@ -13,7 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
           <Providers>
-            <nav className="bg-gray-900 text-gray-900 dark:text-white p-4 shadow mb-6">
+            <nav className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-4 shadow mb-6">
               <div className="flex justify-between items-center max-w-7xl mx-auto">
                 <div className="text-xl font-bold">
                   <Link href="/">RentAPrint</Link>
