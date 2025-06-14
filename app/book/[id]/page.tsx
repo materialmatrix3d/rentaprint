@@ -13,6 +13,7 @@ export default function BookingPage() {
   const { user } = useUser()
   const [printer, setPrinter] = useState<Printer | null>(null)
   const [loading, setLoading] = useState(true)
+  const [runtime, setRuntime] = useState(1)
 
   useEffect(() => {
     const fetchPrinter = async () => {
@@ -37,12 +38,15 @@ export default function BookingPage() {
       return
     }
 
+    const start = new Date()
+    const end = new Date(start.getTime() + runtime * 3600 * 1000)
     const { error } = await supabase.from('bookings').insert({
       printer_id: id,
       clerk_user_id: user.id,
       status: 'pending',
-      start_date: new Date().toISOString(),
-      end_date: new Date(Date.now() + 3600 * 1000).toISOString(),
+      start_date: start.toISOString(),
+      end_date: end.toISOString(),
+      estimated_runtime_hours: runtime,
     })
 
     if (error) {
@@ -83,6 +87,22 @@ export default function BookingPage() {
       <p>
         <strong>Make/Model:</strong> {printer.make_model || 'N/A'}
       </p>
+      <div className="pt-2 space-y-2">
+        <label className="block text-sm">
+          Estimated Runtime (hrs):
+          <input
+            type="number"
+            step="0.1"
+            min="0"
+            value={runtime}
+            onChange={e => setRuntime(parseFloat(e.target.value))}
+            className="mt-1 w-full p-2 border rounded text-black dark:text-white dark:bg-neutral-800"
+          />
+        </label>
+        <p className="text-sm">
+          Estimated Cost: ${'{'}(runtime * (printer.price_per_hour || 0)).toFixed(2){'}'}
+        </p>
+      </div>
       <button
         onClick={handleBooking}
         className="mt-4 px-4 py-2 bg-blue-600 text-gray-900 dark:text-white rounded hover:bg-blue-700"

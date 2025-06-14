@@ -37,6 +37,19 @@ export default function BookingsPage() {
     }
   };
 
+  const deleteBooking = async (bookingId: string) => {
+    if (!confirm('Delete this booking?')) return;
+    const res = await fetch(`/api/bookings/delete/${bookingId}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    if (res.ok) {
+      setBookings(bookings.filter(b => b.id !== bookingId));
+    } else {
+      alert('Failed to delete booking ❌');
+    }
+  };
+
   if (loading) return <p className="text-center p-8 text-gray-900 dark:text-white">Loading bookings...</p>;
 
   return (
@@ -56,6 +69,7 @@ export default function BookingsPage() {
                 className={`text-xs font-semibold px-2 py-1 rounded ${{
                   pending: 'bg-yellow-400 text-black',
                   approved: 'bg-green-600 text-gray-900 dark:text-white',
+                  complete: 'bg-blue-600 text-gray-900 dark:text-white',
                   canceled: 'bg-red-600 text-gray-900 dark:text-white',
                 }[booking.status] || 'bg-gray-300 text-black'}`}
               >
@@ -72,12 +86,22 @@ export default function BookingsPage() {
               >
                 View Printer
               </a>
-              <button
-                onClick={() => cancelBooking(booking.id)}
-                className="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-gray-900 dark:text-white rounded"
-              >
-                Cancel Booking
-              </button>
+              {['pending', 'approved'].includes(booking.status) && (
+                <button
+                  onClick={() => cancelBooking(booking.id)}
+                  className="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-gray-900 dark:text-white rounded"
+                >
+                  Cancel Booking
+                </button>
+              )}
+              {booking.status === 'canceled' && (
+                <button
+                  onClick={() => deleteBooking(booking.id)}
+                  className="px-3 py-1 text-sm bg-gray-500 hover:bg-gray-600 text-white rounded"
+                >
+                  Delete Booking
+                </button>
+              )}
             </div>
           </div>
         ))
