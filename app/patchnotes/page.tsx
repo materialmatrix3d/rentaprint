@@ -12,6 +12,26 @@ const patchNotes = [
       "Reworked Navbar: Links added - My Printers, Patch Notes.",
       "Began work on central Owner Tools panel."
     ]
+  },
+  {
+    date: "June 13, 2025",
+    version: "v0.1.1 – UI & Bug Fixes",
+    notes: [
+      "Cleaned up global styles and removed stray files.",
+      "Improved navbar text visibility in light mode.",
+      "Fixed Patch Notes dark mode styling.",
+      "Resolved booking page parameter issues."
+    ]
+  },
+  {
+    date: "June 13, 2025",
+    version: "v0.2.0 – Dynamic Patch Notes",
+    notes: [
+      "Added API endpoint and database table for patch notes.",
+      "Created dynamic Patch Notes page powered by Supabase.",
+      "Updated navigation link to new patch notes route.",
+      "Provided helper to log notes from the app."
+    ]
   }
 ];
 
