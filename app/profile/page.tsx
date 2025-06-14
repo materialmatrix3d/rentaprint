@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { SignedIn, SignedOut, RedirectToSignIn, useUser, UserButton, signOut } from '@clerk/nextjs'
+import { useEffect, useState, useMemo } from 'react'
+import { SignedIn, SignedOut, RedirectToSignIn, useUser, UserButton, useClerk } from '@clerk/nextjs'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 interface Booking {
@@ -13,7 +13,8 @@ interface Booking {
 
 export default function ProfilePage() {
   const { user } = useUser()
-  const supabase = createClientComponentClient()
+  const { signOut } = useClerk()
+  const supabase = useMemo(() => createClientComponentClient(), [])
 
   const [stats, setStats] = useState({ printers: 0, bookings: 0, hours: 0 })
   const [loadingStats, setLoadingStats] = useState(true)
@@ -63,7 +64,7 @@ export default function ProfilePage() {
 
     loadStats()
     loadUpcoming()
-  }, [user, supabase])
+  }, [user])
 
   return (
     <>

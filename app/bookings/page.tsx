@@ -1,11 +1,11 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 export default function BookingsPage() {
   const { user } = useUser();
-  const supabase = createClientComponentClient();
+  const supabase = useMemo(() => createClientComponentClient(), []);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -22,7 +22,7 @@ export default function BookingsPage() {
     };
 
     if (user?.id) fetchBookings();
-  }, [user, supabase]);
+  }, [user]);
 
   const cancelBooking = async (bookingId: string) => {
     const res = await fetch(`/api/bookings/cancel/${bookingId}`, {

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import Link from 'next/link'
 import { SignedIn, SignedOut, RedirectToSignIn, useUser } from '@clerk/nextjs'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
@@ -18,7 +18,7 @@ interface Booking {
 
 export default function OwnerPanel() {
   const { user } = useUser()
-  const supabase = createClientComponentClient()
+  const supabase = useMemo(() => createClientComponentClient(), [])
 
   const [printers, setPrinters] = useState<Printer[]>([])
   const [bookings, setBookings] = useState<Booking[]>([])
@@ -51,7 +51,7 @@ export default function OwnerPanel() {
     }
 
     if (user?.id) fetchData()
-  }, [user, supabase])
+  }, [user])
 
   const printerList = (
     <section>
