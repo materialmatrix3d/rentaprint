@@ -16,6 +16,7 @@ export default function MyPrinters() {
   const supabase = useMemo(() => createClientComponentClient(), []);
   const [printers, setPrinters] = useState<Printer[]>([]);
   const [loading, setLoading] = useState(true);
+  const [rented, setRented] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const fetchPrinters = async () => {
@@ -26,6 +27,23 @@ export default function MyPrinters() {
       if (error) console.error("Error fetching printers", error);
       setPrinters(data || []);
       setLoading(false);
+      const ids = data?.map(p => p.id) || [];
+      if (ids.length > 0) {
+        const { data: bookings } = await supabase
+          .from('bookings')
+          .select('printer_id,start_date,end_date,status')
+          .in('printer_id', ids);
+        const now = new Date();
+        const map: Record<string, boolean> = {};
+        bookings?.forEach(b => {
+          const start = new Date(b.start_date as string);
+          const end = new Date(b.end_date as string);
+          if (b.status === 'approved' && start <= now && end >= now) {
+            map[b.printer_id as string] = true;
+          }
+        });
+        setRented(map);
+      }
     };
 
     if (user?.id) fetchPrinters();
@@ -47,14 +65,14 @@ export default function MyPrinters() {
   const printerCards = (
     <div className="grid gap-4">
       {printers.map((printer) => (
-        <div
-          key={printer.id}
-          className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded shadow p-4 space-y-2"
-        >
-          <div className="flex justify-between items-start">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-              {printer.name}
-            </h2>
+        <div key={printer.id} className="relative">
+          <div
+            className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded shadow p-4 space-y-2"
+          >
+            <div className="flex justify-between items-start">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                {printer.name}
+              </h2>
             {printer.status && (
               <span
                 className={`text-xs font-semibold px-2 py-1 rounded ${{
@@ -93,6 +111,11 @@ export default function MyPrinters() {
               Delete
             </button>
           </div>
+          {rented[printer.id] && (
+            <span className="absolute inset-0 bg-black/50 text-white flex items-center justify-center font-semibold pointer-events-none rounded">
+              Currently Rented
+            </span>
+          )}
         </div>
       ))}
     </div>

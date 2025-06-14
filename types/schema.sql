@@ -7,6 +7,8 @@ create table if not exists bookings (
   clerk_user_id text,
   start_date timestamp with time zone,
   end_date timestamp with time zone,
+  estimated_runtime_hours numeric,
+  actual_runtime_hours numeric,
   status text default 'pending',
   created_at timestamp with time zone default now()
 );
