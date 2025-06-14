@@ -56,7 +56,7 @@ export default function NewPrinterPage() {
     }
   };
 
-  const inputClass = "w-full p-2 border rounded text-black bg-white dark:text-gray-900 dark:text-white dark:bg-neutral-800";
+  const inputClass = "w-full p-2 border rounded text-black bg-white dark:text-white dark:bg-neutral-800";
 
   return (
     <div className="p-4 max-w-xl mx-auto">

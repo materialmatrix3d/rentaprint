@@ -13,13 +13,13 @@ export default function PrinterCard({ printer, onEdit, onDelete }) {
         <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
           {printer.make_model}
         </h3>
-        {printer.status && (
-          <span className={`text-gray-900 dark:text-gray-900 dark:text-white text-xs px-2 py-1 rounded ${statusColors[printer.status]}`}>
+          {printer.status && (
+            <span className={`text-gray-900 dark:text-white text-xs px-2 py-1 rounded ${statusColors[printer.status]}`}>
             {printer.status}
           </span>
         )}
       </div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-900 dark:text-gray-900 dark:text-white">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
         {printer.name}
       </h2>
 
@@ -40,13 +40,13 @@ export default function PrinterCard({ printer, onEdit, onDelete }) {
       <div className="flex gap-2 pt-4 flex-wrap">
         <Link
           href={`/printers/${printer.id}`}
-          className="px-3 py-1 text-sm bg-gray-300 dark:bg-gray-600 text-black dark:text-gray-900 dark:text-gray-900 dark:text-white rounded hover:bg-gray-400 dark:hover:bg-gray-500"
+            className="px-3 py-1 text-sm bg-gray-300 dark:bg-gray-600 text-black dark:text-white rounded hover:bg-gray-400 dark:hover:bg-gray-500"
         >
           View Details
         </Link>
         <Link
           href={`/book/${printer.id}`}
-          className="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-gray-900 dark:text-gray-900 dark:text-white rounded"
+            className="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-gray-900 dark:text-white rounded"
         >
           Book This Printer
         </Link>
@@ -61,7 +61,7 @@ export default function PrinterCard({ printer, onEdit, onDelete }) {
         {onDelete && (
           <button
             onClick={() => onDelete(printer.id)}
-            className="px-3 py-1 text-sm bg-red-600 text-gray-900 dark:text-gray-900 dark:text-white rounded hover:bg-red-700"
+              className="px-3 py-1 text-sm bg-red-600 text-gray-900 dark:text-white rounded hover:bg-red-700"
           >
             Delete
           </button>

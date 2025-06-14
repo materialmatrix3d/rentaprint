@@ -40,7 +40,7 @@ export default function ReviewForm({ printerId }) {
         placeholder="Your review"
         className="w-full p-2 border rounded"
       />
-      <button type="submit" className="bg-blue-600 text-gray-900 dark:text-gray-900 dark:text-white px-4 py-2 rounded">Submit Review</button>
+        <button type="submit" className="bg-blue-600 text-gray-900 dark:text-white px-4 py-2 rounded">Submit Review</button>
     </form>
   )
 }

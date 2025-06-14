@@ -60,7 +60,7 @@ export default function NewListingPage() {
   };
 
   return (
-    <main className="p-6 max-w-3xl mx-auto text-gray-900 dark:text-gray-900 dark:text-white">
+    <main className="p-6 max-w-3xl mx-auto text-gray-900 dark:text-white">
       <h1 className="text-3xl font-bold mb-6">🆕 New Printer Listing</h1>
       <form onSubmit={handleSubmit} className="space-y-6 bg-white dark:bg-gray-800 p-6 rounded-xl shadow border dark:border-gray-700">
         <div>
@@ -83,7 +83,7 @@ export default function NewListingPage() {
                 type="button"
                 key={mat}
                 onClick={() => toggleMaterial(mat)}
-                className={`px-3 py-1 rounded-full text-sm border ${form.materials.includes(mat) ? 'bg-blue-500 text-gray-900 dark:text-white border-blue-500' : 'bg-gray-200 dark:bg-gray-600 dark:text-gray-900 dark:text-white'}`}
+                className={`px-3 py-1 rounded-full text-sm border ${form.materials.includes(mat) ? 'bg-blue-500 text-gray-900 dark:text-white border-blue-500' : 'bg-gray-200 dark:bg-gray-600 dark:text-white'}`}
               >
                 {mat}
               </button>

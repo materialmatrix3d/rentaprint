@@ -52,7 +52,7 @@ export default function Home() {
         <h2 className="text-2xl font-bold">Get Started</h2>
         <div className="flex gap-4 flex-wrap">
           <Link href="/printers/new" className="bg-blue-600 text-gray-900 dark:text-white px-4 py-2 rounded hover:bg-blue-700">List Your Printer</Link>
-          <Link href="/printers" className="bg-gray-300 dark:bg-gray-700 text-black dark:text-gray-900 dark:text-white px-4 py-2 rounded hover:bg-gray-400 dark:hover:bg-gray-600">Browse Printers</Link>
+          <Link href="/printers" className="bg-gray-300 dark:bg-gray-700 text-black dark:text-white px-4 py-2 rounded hover:bg-gray-400 dark:hover:bg-gray-600">Browse Printers</Link>
         </div>
       </section>
     </main>
