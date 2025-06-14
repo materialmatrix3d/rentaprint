@@ -1,6 +1,8 @@
 import { auth } from '@clerk/nextjs'
 import { createClient } from '@/lib/supabase/server'
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   const { userId } = auth()
   if (!userId) return new Response('Unauthorized', { status: 401 })

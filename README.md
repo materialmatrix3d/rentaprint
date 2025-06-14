@@ -18,9 +18,17 @@
    ```
    This defines the `bookings` and `patch_notes` tables used by the app.
 4. Start the development server:
-   ```bash
-   npm run dev
-   ```
+ ```bash
+  npm run dev
+  ```
+
+## Running tests
+
+Run the Jest test suite with:
+
+```bash
+npm test
+```
 
 The app will be available at `http://localhost:3000`.
 
