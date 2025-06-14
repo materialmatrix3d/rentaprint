@@ -117,13 +117,14 @@ export default function MyPrinters() {
             </span>
           )}
         </div>
+        </div>
       ))}
     </div>
   );
 
   const emptyState = (
     <div className="space-y-2 text-gray-900 dark:text-white">
-      <p>You haven\'t listed any printers yet.</p>
+      <p>You haven't listed any printers yet.</p>
       <Link
         href="/new-listing"
         className="inline-block px-4 py-2 bg-blue-600 hover:bg-blue-700 text-gray-900 dark:text-white rounded"
