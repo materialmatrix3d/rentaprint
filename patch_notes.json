@@ -34,5 +34,11 @@
     "title": "Profile Page",
     "description": "Populated the Profile page with user details, account actions, printer/bookings stats, and upcoming bookings display.",
     "created_at": "2025-06-14T02:46:00.000Z"
+  },
+  {
+    "id": "4ed11556-c66e-4e85-a15f-b0d201c883e4",
+    "title": "Owner Panel Update",
+    "description": "Edit buttons in the Owner Panel now link to the printer edit screen for easier management.",
+    "created_at": "2025-06-16T00:00:00.000Z"
   }
 ]
