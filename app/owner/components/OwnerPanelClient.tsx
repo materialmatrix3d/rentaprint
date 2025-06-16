@@ -79,6 +79,7 @@ export default function OwnerPanel() {
         .from('printers')
         .select('*')
         .eq('clerk_user_id', user?.id)
+        .eq('is_deleted', false)
 
       if (printerError)
         console.error(
@@ -95,6 +96,7 @@ export default function OwnerPanel() {
           .from('bookings')
           .select('id, printer_id, status, created_at, clerk_user_id, start_date, end_date, estimated_runtime_hours, actual_runtime_hours, printers(name)')
           .in('printer_id', ids)
+          .eq('printers.is_deleted', false)
           .order('start_date', { ascending: false })
 
         if (bookingError)

@@ -18,7 +18,12 @@ export default function EditPrinterPage() {
 
   useEffect(() => {
     async function fetchPrinter() {
-      const { data } = await supabase.from('printers').select('*').eq('id', id).single()
+      const { data } = await supabase
+        .from('printers')
+        .select('*')
+        .eq('id', id)
+        .eq('is_deleted', false)
+        .single()
       if (data) {
         setForm({
           name: data.name,

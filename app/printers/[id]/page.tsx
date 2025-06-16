@@ -14,7 +14,12 @@ export default function PrinterDetailPage() {
 
   useEffect(() => {
     const fetchPrinter = async () => {
-      const { data: printerData } = await supabase.from('printers').select('*').eq('id', id).single();
+      const { data: printerData } = await supabase
+        .from('printers')
+        .select('*')
+        .eq('id', id)
+        .eq('is_deleted', false)
+        .single();
       const { data: bookings } = await supabase
         .from('bookings')
         .select('start_date, end_date, status')

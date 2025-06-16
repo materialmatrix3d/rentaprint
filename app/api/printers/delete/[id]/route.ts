@@ -16,7 +16,7 @@ export async function DELETE(
 
   const { error, data } = await supabase
     .from('printers')
-    .delete()
+    .update({ is_deleted: true })
     .eq('id', params.id)
     .eq('clerk_user_id', userId)
     .select();

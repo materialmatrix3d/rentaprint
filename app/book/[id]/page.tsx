@@ -21,6 +21,7 @@ export default function BookingPage() {
         .from('printers')
         .select('*')
         .eq('id', id)
+        .eq('is_deleted', false)
         .single()
       if (error) {
         console.error('Error fetching printer:', error)
