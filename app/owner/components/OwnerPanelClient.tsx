@@ -56,7 +56,12 @@ export default function OwnerPanel() {
         .select('*')
         .eq('clerk_user_id', user?.id)
 
-      if (printerError) console.error('Error fetching printers:', printerError)
+      if (printerError)
+        console.error(
+          'Error fetching printers:',
+          printerError.message,
+          printerError.details ?? ''
+        )
       setPrinters(printerData || [])
       setLoadingPrinters(false)
 
@@ -68,7 +73,12 @@ export default function OwnerPanel() {
           .in('printer_id', ids)
           .order('start_date', { ascending: false })
 
-        if (bookingError) console.error('Error fetching bookings:', bookingError)
+        if (bookingError)
+          console.error(
+            'Error fetching bookings:',
+            bookingError.message,
+            bookingError.details ?? ''
+          )
         setBookings((bookingData || []) as Booking[])
       }
       setLoadingBookings(false)
