@@ -6,9 +6,10 @@ export const dynamic = 'force-dynamic';
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: any
 ) {
-  const { userId } = auth();
+  const { params } = context as { params: { id: string } };
+  const { userId } = await auth();
   if (!userId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

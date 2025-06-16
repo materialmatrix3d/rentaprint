@@ -6,13 +6,17 @@ import { useRouter } from 'next/navigation'
 import { useUser } from '@clerk/nextjs'
 import { supabase } from '@/lib/supabaseClient'
 
-export default function ReviewForm({ printerId }) {
+interface ReviewFormProps {
+  printerId: string;
+}
+
+export default function ReviewForm({ printerId }: ReviewFormProps) {
   const { user } = useUser()
   const router = useRouter()
-  const [rating, setRating] = useState(5)
+  const [rating, setRating] = useState<number>(5)
   const [comment, setComment] = useState('')
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const { error } = await supabase.from('reviews').insert({
       clerk_user_id: user?.id,

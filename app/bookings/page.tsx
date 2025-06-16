@@ -3,10 +3,19 @@ import { useEffect, useState, useMemo } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
+interface Booking {
+  id: string;
+  printer_id: string;
+  start_date: string;
+  end_date: string;
+  status: string;
+  printers: { name: string };
+}
+
 export default function BookingsPage() {
   const { user } = useUser();
   const supabase = useMemo(() => createClientComponentClient(), []);
-  const [bookings, setBookings] = useState([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

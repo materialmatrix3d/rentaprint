@@ -1,5 +1,11 @@
 
-export default function FilterButtons({ filters, currentFilter, setFilter }) {
+interface FilterButtonsProps {
+  filters: string[];
+  currentFilter: string;
+  setFilter: (filter: string) => void;
+}
+
+export default function FilterButtons({ filters, currentFilter, setFilter }: FilterButtonsProps) {
   return (
     <div className="flex gap-2 mb-4 flex-wrap">
       {filters.map(filter => (

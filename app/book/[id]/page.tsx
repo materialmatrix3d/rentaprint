@@ -79,7 +79,7 @@ export default function BookingPage() {
       </p>
       <p>
         <strong>Hourly Rate:</strong>{' '}
-        {printer.price_per_hour ? `$${parseFloat(printer.price_per_hour)}` : '$N/A'}
+        {printer.price_per_hour ? `$${printer.price_per_hour.toFixed(2)}` : '$N/A'}
       </p>
       <p>
         <strong>Availability:</strong> {printer.availability || 'Not specified'}
