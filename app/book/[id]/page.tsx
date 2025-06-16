@@ -38,6 +38,11 @@ export default function BookingPage() {
       return
     }
 
+    if (!runtime || isNaN(runtime) || runtime <= 0) {
+      alert('Please enter a valid runtime in hours.')
+      return
+    }
+
     const start = new Date()
     const end = new Date(start.getTime() + runtime * 3600 * 1000)
     const { error } = await supabase.from('bookings').insert({
@@ -50,8 +55,12 @@ export default function BookingPage() {
     })
 
     if (error) {
-      console.error('Error creating booking:', error)
-      alert('Booking failed.')
+      console.error(
+        'Error creating booking:',
+        error.message,
+        error.details ?? ''
+      )
+      alert(`Booking failed: ${error.message}`)
     } else {
       alert('Booking successful!')
       router.push('/bookings')
