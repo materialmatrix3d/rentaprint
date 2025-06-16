@@ -1,6 +1,8 @@
 # Contributing to RentAPrint
 
-Thank you for your interest in contributing! We welcome issues and pull requests.
+Thank you for your interest in contributing! We welcome issues and pull
+requests. Feel free to fork the repository and open issues to discuss new
+features or improvements.
 
 ## Development Setup
 
@@ -26,7 +28,15 @@ Thank you for your interest in contributing! We welcome issues and pull requests
 ### Sample Codex Prompt
 
 ```
-Add a feature to allow users to upload printer photos via drag and drop.
+Add a dark mode toggle
+```
+
+```
+Implement printer search filters
+```
+
+```
+Auto-update patch notes after each PR merge
 ```
 
 We encourage opening issues first if you're planning large changes.

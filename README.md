@@ -1,9 +1,11 @@
 # RentAPrint
 
-RentAPrint is an open-source platform for sharing and booking 3D printers.
-It allows printer owners to list their devices and makers to book time on
-printers near them. The official hosted service is available at
-[https://rentaprint.net](https://rentaprint.net).
+[![License: BSL 1.1](https://img.shields.io/badge/License-BSL--1.1-blue.svg)](LICENSE)
+[![Build Status](https://github.com/rentaprint/rentaprint/actions/workflows/ci.yml/badge.svg)](https://github.com/rentaprint/rentaprint/actions/workflows/ci.yml)
+
+RentAPrint is an open-source platform for listing and booking 3D printers. It
+lets owners share their machines while makers reserve print time. The official
+service is available at [rentaprint.net](https://rentaprint.net).
 
 ## Local Development
 
@@ -30,16 +32,17 @@ The app will be available at `http://localhost:3000`.
 
 ## Monetization Policy
 
-Self‑hosting is allowed for personal use. **Commercial use requires a separate
-license** or is permitted once the project transitions to the MIT license two
-years after each release.
+Personal self-hosting is allowed. **Commercial use**&mdash;including resale or
+hosting RentAPrint for clients&mdash;is not permitted without a separate
+license. Commercial usage becomes allowed when the project switches to the MIT
+license two years after each release.
 
 ## Contributing
 
 We welcome pull requests and issue reports! See
-[CONTRIBUTING.md](.github/CONTRIBUTING.md) for guidelines.
-Codex users can help by submitting patches, documentation improvements and
-new feature ideas.
+[CONTRIBUTING.md](.github/CONTRIBUTING.md) for the full guidelines.
+Codex users are encouraged to submit prompt ideas alongside code patches and
+documentation improvements.
 
 ## License
 
