@@ -17,8 +17,9 @@ service is available at [rentaprint.net](https://rentaprint.net).
    ```bash
    cp .env.example .env.local
    ```
-3. Create the database tables by running the SQL in `types/schema.sql` against
-   your Supabase project.
+3. Create **or update** the database tables by running the SQL in `types/schema.sql`
+   against your Supabase project. Whenever you pull new code, re-run this file to
+   apply any schema changes (for example new columns like `estimated_runtime_hours`).
 4. Insert example patch notes:
    ```bash
    npx ts-node scripts/sync-patch-notes.ts
