@@ -1,49 +1,47 @@
-# rentaprint
+# RentAPrint
 
-3D printer sharing platform
+RentAPrint is an open-source platform for sharing and booking 3D printers.
+It allows printer owners to list their devices and makers to book time on
+printers near them. The official hosted service is available at
+[https://rentaprint.net](https://rentaprint.net).
 
-## Setup
+## Local Development
 
-1. Install dependencies with `npm install` (Node.js 18 or higher is recommended).
-2. Copy `.env.example` to `.env.local`:
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Copy the example environment file:
    ```bash
    cp .env.example .env.local
    ```
-3. Create the database tables. Run the SQL in `types/schema.sql` against your
-   Supabase project using the SQL editor or `psql`:
-   ```bash
-   psql "$SUPABASE_URL" < types/schema.sql
-   ```
-   This defines the `bookings`, `patch_notes`, and `reviews` tables used by the app.
-4. Insert some example patch notes so the page isn't empty. Run the sync script
-   to upload the notes from `patch_notes.json`:
+3. Create the database tables by running the SQL in `types/schema.sql` against
+   your Supabase project.
+4. Insert example patch notes:
    ```bash
    npx ts-node scripts/sync-patch-notes.ts
    ```
-   The script reads `patch_notes.json` and inserts any notes that don't already
-   exist in your Supabase database. You can modify the JSON file to add new
-   entries and re-run the script at any time.
-5. Start the development server:
+5. Start the dev server:
    ```bash
-    npm run dev
-    ```
-
-## Running tests
-
-Install dependencies first to ensure Jest and other dev tools are available:
-
-```bash
-npm install
-```
-
-Then run the test suite with:
-
-```bash
-npm test
-```
+   npm run dev
+   ```
 
 The app will be available at `http://localhost:3000`.
 
+## Monetization Policy
+
+Self‑hosting is allowed for personal use. **Commercial use requires a separate
+license** or is permitted once the project transitions to the MIT license two
+years after each release.
+
+## Contributing
+
+We welcome pull requests and issue reports! See
+[CONTRIBUTING.md](.github/CONTRIBUTING.md) for guidelines.
+Codex users can help by submitting patches, documentation improvements and
+new feature ideas.
+
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is released under the Business Source License 1.1. See
+[LICENSE](LICENSE) for details.
