@@ -71,12 +71,21 @@ export default function PrinterDetailPage() {
       <p><strong>Max Print Size:</strong> {printer.build_volume}</p>
       <p><strong>Rate:</strong> ${printer.price_per_hour}/hr</p>
       <p><strong>Description:</strong> {printer.description}</p>
-      <Link
-        href={`/book/${printer.id}`}
-        className="inline-block mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-gray-900 dark:text-white rounded"
-      >
-        Request Booking
-      </Link>
+      {!printer.is_deleted ? (
+        <Link
+          href={`/book/${printer.id}`}
+          className="inline-block mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-gray-900 dark:text-white rounded"
+        >
+          Request Booking
+        </Link>
+      ) : (
+        <button
+          disabled
+          className="inline-block mt-4 px-4 py-2 bg-gray-400 text-white rounded cursor-not-allowed"
+        >
+          Booking Unavailable (Deleted Printer)
+        </button>
+      )}
     </div>
   );
 }
