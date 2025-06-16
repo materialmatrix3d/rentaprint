@@ -112,9 +112,12 @@ export default function OwnerPanel() {
                   {printer.price_per_hour}/hr
                 </p>
               </div>
-              <button className="px-3 py-1 text-sm bg-yellow-400 text-black rounded hover:bg-yellow-500">
+              <Link
+                href={`/my-printers/${printer.id}/edit`}
+                className="px-3 py-1 text-sm bg-yellow-400 text-black rounded hover:bg-yellow-500"
+              >
                 Edit
-              </button>
+              </Link>
             </li>
           ))}
         </ul>
