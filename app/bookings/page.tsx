@@ -2,11 +2,12 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { bookingStatusClasses, type BookingStatus } from '@/lib/bookings';
 
 interface Booking {
   id: string
   printer_id: string
-  status: string
+  status: BookingStatus
   created_at: string
   clerk_user_id: string
   start_date: string
@@ -77,14 +78,9 @@ export default function BookingsPage() {
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">{booking.printers.name}</h2>
               <span
-                className={`text-xs font-semibold px-2 py-1 rounded ${{
-                  pending: 'bg-yellow-400 text-black',
-                  approved: 'bg-green-600 text-gray-900 dark:text-white',
-                  rejected: 'bg-red-600 text-gray-900 dark:text-white',
-                  in_progress: 'bg-blue-500 text-gray-900 dark:text-white',
-                  completed: 'bg-blue-600 text-gray-900 dark:text-white',
-                  canceled: 'bg-red-600 text-gray-900 dark:text-white',
-                }[booking.status as keyof any] || 'bg-gray-300 text-black'}`}
+                className={`text-xs font-semibold px-2 py-1 rounded ${
+                  bookingStatusClasses[booking.status] || 'bg-gray-300 text-black'
+                }`}
               >
                 {booking.status}
               </span>
@@ -102,7 +98,9 @@ export default function BookingsPage() {
               >
                 View Printer
               </a>
-              {['pending', 'approved'].includes(booking.status) && (
+              {(['pending', 'approved'] as BookingStatus[]).includes(
+                booking.status
+              ) && (
                 <button
                   onClick={() => cancelBooking(booking.id)}
                   className="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-gray-900 dark:text-white rounded"
