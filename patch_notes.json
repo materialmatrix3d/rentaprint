@@ -52,5 +52,11 @@
     "title": "Fix View Deleted Printers",
     "description": "Viewing a soft-deleted printer no longer hangs and now shows a deleted label.",
     "created_at": "2025-06-16T22:20:00.000Z"
+  },
+  {
+    "id": "e33841df-68bb-4c0f-9927-2e1070f1f569",
+    "title": "Soft Delete Support",
+    "description": "Implemented soft delete for printers, preserved historical bookings and visibility, fixed \"Unknown Printer\" display, allowed viewing deleted printers, and hid the booking button for deleted listings.",
+    "created_at": "2025-06-16T22:45:00.000Z"
   }
 ]
