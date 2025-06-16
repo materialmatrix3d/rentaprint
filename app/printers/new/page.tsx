@@ -39,6 +39,7 @@ export default function NewPrinterPage() {
       build_volume: formData.build_volume,
       price_per_hour: parseFloat(formData.price_per_hour),
       description: formData.description || null,
+      is_available: true,
     }]);
 
     if (error) {

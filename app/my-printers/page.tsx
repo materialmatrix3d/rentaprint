@@ -62,6 +62,20 @@ export default function MyPrinters() {
     }
   };
 
+  const toggleAvailability = async (id: string, current: boolean) => {
+    const { error } = await supabase
+      .from('printers')
+      .update({ is_available: !current })
+      .eq('id', id);
+    if (error) {
+      alert('Failed to update availability');
+    } else {
+      setPrinters(printers.map(p =>
+        p.id === id ? { ...p, is_available: !current } : p
+      ));
+    }
+  };
+
   const printerCards = (
     <div className="grid gap-4">
       {printers.map((printer) => (
@@ -73,17 +87,18 @@ export default function MyPrinters() {
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                 {printer.name}
               </h2>
-            {printer.status && (
+            <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
+              Status:
               <span
-                className={`text-xs font-semibold px-2 py-1 rounded ${{
-                  available: "bg-green-600 text-gray-900 dark:text-white",
-                  pending: "bg-yellow-500 text-black",
-                  rented: "bg-red-600 text-gray-900 dark:text-white",
-                }[printer.status]}`}
+                className={`text-xs font-semibold px-2 py-1 rounded ${
+                  printer.is_available
+                    ? 'bg-green-600 text-gray-900 dark:text-white'
+                    : 'bg-red-600 text-gray-900 dark:text-white'
+                }`}
               >
-                {printer.status}
+                {printer.is_available ? 'available' : 'unavailable'}
               </span>
-            )}
+            </p>
           </div>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             {printer.price_per_hour}/hr &bull; {printer.build_volume}
@@ -104,6 +119,12 @@ export default function MyPrinters() {
             >
               Edit
             </Link>
+            <button
+              onClick={() => toggleAvailability(printer.id, printer.is_available ?? true)}
+              className="px-3 py-1 text-sm bg-gray-300 dark:bg-gray-600 text-black dark:text-white rounded hover:bg-gray-400 dark:hover:bg-gray-500"
+            >
+              {printer.is_available ? 'Set Unavailable' : 'Set Available'}
+            </button>
             <button
               onClick={() => deletePrinter(printer.id)}
               className="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-gray-900 dark:text-white rounded"
