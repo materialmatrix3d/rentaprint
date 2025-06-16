@@ -33,6 +33,7 @@ export default function ProfilePage() {
         .from('printers')
         .select('*', { count: 'exact', head: true })
         .eq('clerk_user_id', user.id)
+        .eq('is_deleted', false)
 
       const { data: bookingData, count: bookingCount } = await supabase
         .from('bookings')
@@ -59,6 +60,7 @@ export default function ProfilePage() {
         .from('bookings')
         .select('id, printer_id, status, created_at, start_date, end_date, printers(name)')
         .eq('clerk_user_id', user.id)
+        .eq('printers.is_deleted', false)
         .gt('start_date', new Date().toISOString())
         .order('start_date', { ascending: true })
 

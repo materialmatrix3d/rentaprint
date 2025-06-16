@@ -15,7 +15,8 @@ export default function PrintersPage() {
       const { data } = await supabase
         .from('printers')
         .select('*')
-        .eq('is_available', true);
+        .eq('is_available', true)
+        .eq('is_deleted', false);
       setPrinters(data || []);
       const ids = data?.map((p: any) => p.id) || [];
       if (ids.length > 0) {

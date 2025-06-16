@@ -26,7 +26,8 @@ export default function BookingsPage() {
       const { data, error } = await supabase
         .from('bookings')
         .select('*, printers(*)')
-        .eq('clerk_user_id', user?.id);
+        .eq('clerk_user_id', user?.id)
+        .eq('printers.is_deleted', false);
 
       if (error) console.error(error);
       else setBookings(data || []);

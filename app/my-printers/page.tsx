@@ -23,7 +23,8 @@ export default function MyPrinters() {
       const { data, error } = await supabase
         .from("printers")
         .select("*")
-        .eq("clerk_user_id", user?.id);
+        .eq("clerk_user_id", user?.id)
+        .eq('is_deleted', false);
       if (error) console.error("Error fetching printers", error);
       setPrinters(data || []);
       setLoading(false);
