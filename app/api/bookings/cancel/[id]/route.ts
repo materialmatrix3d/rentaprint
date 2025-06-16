@@ -1,13 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '../../../utils/supabase/server';
+import type { RouteHandlerContext } from 'next/dist/server/future/route-modules/app-route/types';
 
-interface Params {
-  params: {
-    id: string;
-  };
-}
-
-export async function DELETE(req: NextRequest, context: Params) {
+export async function DELETE(req: NextRequest, context: RouteHandlerContext) {
   const supabase = createClient();
   const bookingId = context.params.id;
 
