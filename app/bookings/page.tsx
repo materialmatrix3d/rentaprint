@@ -31,7 +31,7 @@ export default function BookingsPage() {
     });
     if (res.ok) {
       alert("Booking canceled ✅");
-      setBookings(bookings.filter(b => b.id !== bookingId));
+      setBookings(bookings.map(b => b.id === bookingId ? { ...b, status: 'canceled' } : b));
     } else {
       alert("Failed to cancel booking ❌");
     }
