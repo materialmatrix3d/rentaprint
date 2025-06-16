@@ -8,10 +8,12 @@ import type { Printer } from '@/lib/data'
 
 interface Booking {
   id: string
+  printer_id: string
   clerk_user_id: string
+  status: string
+  created_at: string
   start_date: string
   end_date: string
-  status: string
   estimated_runtime_hours?: number
   actual_runtime_hours?: number
   printers: { name: string } | { name: string }[]
@@ -64,7 +66,7 @@ export default function OwnerPanel() {
         const ids = printerData.map((p) => p.id)
         const { data: bookingData, error: bookingError } = await supabase
           .from('bookings')
-          .select('id, clerk_user_id, start_date, end_date, status, estimated_runtime_hours, actual_runtime_hours, printers(name)')
+          .select('id, printer_id, status, created_at, clerk_user_id, start_date, end_date, estimated_runtime_hours, actual_runtime_hours, printers(name)')
           .in('printer_id', ids)
           .order('start_date', { ascending: false })
 
@@ -136,20 +138,23 @@ export default function OwnerPanel() {
                       ? booking.printers[0]?.name
                       : booking.printers.name}
                   </p>
-                  <span
-                    className={`text-xs font-semibold px-2 py-1 rounded ${{
-                      pending: 'bg-yellow-400 text-black',
-                      approved: 'bg-green-600 text-gray-900 dark:text-white',
-                      complete: 'bg-blue-600 text-gray-900 dark:text-white',
-                      canceled: 'bg-red-600 text-gray-900 dark:text-white',
-                    }[booking.status]}`}
-                  >
-                    {booking.status}
-                  </span>
-                </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Renter: {booking.clerk_user_id}
-                </p>
+                <span
+                  className={`text-xs font-semibold px-2 py-1 rounded ${{
+                    pending: 'bg-yellow-400 text-black',
+                    approved: 'bg-green-600 text-gray-900 dark:text-white',
+                    complete: 'bg-blue-600 text-gray-900 dark:text-white',
+                    canceled: 'bg-red-600 text-gray-900 dark:text-white',
+                  }[booking.status]}`}
+                >
+                  {booking.status}
+                </span>
+              </div>
+              <p className="text-xs text-gray-600 dark:text-gray-400">
+                Booked {new Date(booking.created_at).toLocaleString()}
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Renter: {booking.clerk_user_id}
+              </p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   Start: {start.toLocaleString()}
                 </p>

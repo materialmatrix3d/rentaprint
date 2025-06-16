@@ -4,12 +4,14 @@ import { useUser } from '@clerk/nextjs';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 interface Booking {
-  id: string;
-  printer_id: string;
-  start_date: string;
-  end_date: string;
-  status: string;
-  printers: { name: string };
+  id: string
+  printer_id: string
+  status: string
+  created_at: string
+  clerk_user_id: string
+  start_date: string
+  end_date: string
+  printers: { name: string }
 }
 
 export default function BookingsPage() {
@@ -85,6 +87,9 @@ export default function BookingsPage() {
                 {booking.status}
               </span>
             </div>
+            <p className="text-xs text-gray-600 dark:text-gray-400">
+              Booked {new Date(booking.created_at).toLocaleString()}
+            </p>
             <p className="text-sm text-gray-600 dark:text-gray-400">
               From {new Date(booking.start_date).toLocaleDateString()} to {new Date(booking.end_date).toLocaleDateString()}
             </p>
