@@ -12,7 +12,7 @@ interface Booking {
   clerk_user_id: string
   start_date: string
   end_date: string
-  printers: { name: string }
+  printers: { name: string; is_deleted?: boolean }
 }
 
 export default function BookingsPage() {
@@ -26,8 +26,7 @@ export default function BookingsPage() {
       const { data, error } = await supabase
         .from('bookings')
         .select('*, printers(*)')
-        .eq('clerk_user_id', user?.id)
-        .eq('printers.is_deleted', false);
+        .eq('clerk_user_id', user?.id);
 
       if (error) console.error(error);
       else setBookings(data || []);
@@ -78,7 +77,9 @@ export default function BookingsPage() {
           >
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">
-                {booking.printers?.name || 'Unknown Printer'}
+                {booking.printers
+                  ? `${booking.printers.name}${booking.printers.is_deleted ? ' (deleted)' : ''}`
+                  : 'Unknown Printer'}
               </h2>
               <span
                 className={`text-xs font-semibold px-2 py-1 rounded ${
