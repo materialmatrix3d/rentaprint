@@ -1,11 +1,13 @@
 import { auth } from "@clerk/nextjs/server";
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from 'next/server'
-import type { RouteHandlerContext } from 'next/dist/server/future/route-modules/app-route/types'
 
 export const dynamic = 'force-dynamic';
 
-export async function DELETE(request: NextRequest, context: RouteHandlerContext) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   const { userId } = auth();
   const supabase = createClient();
 
@@ -14,7 +16,7 @@ export async function DELETE(request: NextRequest, context: RouteHandlerContext)
   const { error, data } = await supabase
     .from('bookings')
     .delete()
-    .eq('id', context.params.id)
+    .eq('id', params.id)
     .eq('clerk_user_id', userId)
     .select();
 
