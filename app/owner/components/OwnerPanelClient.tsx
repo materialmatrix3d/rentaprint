@@ -30,11 +30,32 @@ export default function OwnerPanel() {
   const [runtimeModal, setRuntimeModal] = useState<{ id: string } | null>(null)
   const [actualRuntime, setActualRuntime] = useState('')
 
+  const toggleAvailability = async (id: string, current: boolean) => {
+    const { error } = await supabase
+      .from('printers')
+      .update({ is_available: !current })
+      .eq('id', id)
+    if (error) {
+      alert('Failed to update availability')
+    } else {
+      setPrinters(printers.map(p => (p.id === id ? { ...p, is_available: !current } : p)))
+    }
+  }
+
+  const updateStatus = async (id: string, status: string) => {
+    const { error } = await supabase.from('bookings').update({ status }).eq('id', id)
+    if (error) {
+      alert('Failed to update booking')
+    } else {
+      setBookings(bookings.map(b => (b.id === id ? { ...b, status } : b)))
+    }
+  }
+
   const submitRuntime = async () => {
     if (!runtimeModal) return
     const { error } = await supabase
       .from('bookings')
-      .update({ actual_runtime_hours: parseFloat(actualRuntime), status: 'complete' })
+      .update({ actual_runtime_hours: parseFloat(actualRuntime), status: 'completed' })
       .eq('id', runtimeModal.id)
 
     if (error) {
@@ -43,7 +64,7 @@ export default function OwnerPanel() {
     } else {
       setBookings(
         bookings.map(b =>
-          b.id === runtimeModal.id ? { ...b, status: 'complete', actual_runtime_hours: parseFloat(actualRuntime) } : b
+          b.id === runtimeModal.id ? { ...b, status: 'completed', actual_runtime_hours: parseFloat(actualRuntime) } : b
         )
       )
     }
@@ -92,96 +113,73 @@ export default function OwnerPanel() {
   const printerList = (
     <section>
       <h2 className="text-xl font-semibold mb-2">Your Printers</h2>
-      {loadingPrinters ? (
+      {loadingPrinters || loadingBookings ? (
         <p>Loading printers...</p>
       ) : printers.length === 0 ? (
         <p>You have no printers listed yet.</p>
       ) : (
         <ul className="space-y-3">
-          {printers.map((printer) => (
-            <li
-              key={printer.id}
-              className="p-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-            >
-              <div>
-                <p className="font-medium text-gray-900 dark:text-white">
-                  {printer.name}
-                </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Status: {printer.status || 'available'} &bull; ${' '}
-                  {printer.price_per_hour}/hr
-                </p>
-              </div>
-              <Link
-                href={`/my-printers/${printer.id}/edit`}
-                className="px-3 py-1 text-sm bg-yellow-400 text-black rounded hover:bg-yellow-500"
-              >
-                Edit
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
-  )
-
-  const bookingList = (
-    <section>
-      <h2 className="text-xl font-semibold mb-2">Recent Bookings</h2>
-      {loadingBookings ? (
-        <p>Loading bookings...</p>
-      ) : bookings.length === 0 ? (
-        <p>No bookings for your printers yet.</p>
-      ) : (
-        <ul className="space-y-3">
-          {bookings.map((booking) => {
-            const start = new Date(booking.start_date)
-            const end = new Date(booking.end_date)
-            const hours = Math.round((end.getTime() - start.getTime()) / 3600000)
-            const now = new Date()
-            const active = booking.status === 'approved' && start <= now && end >= now
+          {printers.map((printer) => {
+            const printerBookings = bookings.filter(b => b.printer_id === printer.id)
             return (
-              <li
-                key={booking.id}
-                className="p-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded text-gray-900 dark:text-white space-y-1"
-              >
-                <div className="flex items-center justify-between">
-                  <p className="font-medium">
-                    {Array.isArray(booking.printers)
-                      ? booking.printers[0]?.name
-                      : booking.printers.name}
-                  </p>
-                <span
-                  className={`text-xs font-semibold px-2 py-1 rounded ${{
-                    pending: 'bg-yellow-400 text-black',
-                    approved: 'bg-green-600 text-gray-900 dark:text-white',
-                    complete: 'bg-blue-600 text-gray-900 dark:text-white',
-                    canceled: 'bg-red-600 text-gray-900 dark:text-white',
-                  }[booking.status]}`}
-                >
-                  {booking.status}
-                </span>
-              </div>
-              <p className="text-xs text-gray-600 dark:text-gray-400">
-                Booked {new Date(booking.created_at).toLocaleString()}
-              </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Renter: {booking.clerk_user_id}
-              </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Start: {start.toLocaleString()}
-                </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Est: {booking.estimated_runtime_hours ?? hours} hrs
-                  {booking.actual_runtime_hours && ` • Actual: ${booking.actual_runtime_hours} hrs`}
-                </p>
-                {active && (
-                  <button
-                    onClick={() => setRuntimeModal({ id: booking.id })}
-                    className="mt-2 px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-gray-900 dark:text-white rounded"
-                  >
-                    Set Final Runtime
-                  </button>
+              <li key={printer.id} className="p-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded space-y-2">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="font-medium text-gray-900 dark:text-white">{printer.name}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
+                      Status:
+                      <span className={`text-xs font-semibold px-2 py-1 rounded ${printer.is_available ? 'bg-green-600 text-gray-900 dark:text-white' : 'bg-red-600 text-gray-900 dark:text-white'}`}>{printer.is_available ? 'available' : 'unavailable'}</span>
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">${printer.price_per_hour}/hr</p>
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    <Link href={`/my-printers/${printer.id}/edit`} className="px-3 py-1 text-sm bg-yellow-400 text-black rounded hover:bg-yellow-500">Edit</Link>
+                    <button onClick={() => toggleAvailability(printer.id, printer.is_available ?? true)} className="px-3 py-1 text-sm bg-gray-300 dark:bg-gray-600 text-black dark:text-white rounded hover:bg-gray-400 dark:hover:bg-gray-500">
+                      {printer.is_available ? 'Set Unavailable' : 'Set Available'}
+                    </button>
+                  </div>
+                </div>
+                {printerBookings.length > 0 && (
+                  <ul className="space-y-2">
+                    {printerBookings.map((booking) => {
+                      const start = new Date(booking.start_date)
+                      const end = new Date(booking.end_date)
+                      const hours = Math.round((end.getTime() - start.getTime()) / 3600000)
+                      return (
+                        <li key={booking.id} className="p-3 border rounded bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white space-y-1">
+                          <div className="flex justify-between items-center">
+                            <p className="font-medium">{Array.isArray(booking.printers) ? booking.printers[0]?.name : booking.printers.name}</p>
+                            <span className={`text-xs font-semibold px-2 py-1 rounded ${{
+                                pending: 'bg-yellow-400 text-black',
+                                approved: 'bg-green-600 text-gray-900 dark:text-white',
+                                rejected: 'bg-red-600 text-gray-900 dark:text-white',
+                                in_progress: 'bg-blue-500 text-gray-900 dark:text-white',
+                                completed: 'bg-blue-600 text-gray-900 dark:text-white',
+                                canceled: 'bg-red-600 text-gray-900 dark:text-white',
+                              }[booking.status as keyof any]}`}>{booking.status}</span>
+                          </div>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">Booked {new Date(booking.created_at).toLocaleString()}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Renter: {booking.clerk_user_id}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Start: {start.toLocaleString()}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Est: {booking.estimated_runtime_hours ?? hours} hrs{booking.actual_runtime_hours && ` • Actual: ${booking.actual_runtime_hours} hrs`}</p>
+                          <div className="flex gap-2 flex-wrap pt-1">
+                            {booking.status === 'pending' && (
+                              <>
+                                <button onClick={() => updateStatus(booking.id, 'approved')} className="px-2 py-1 text-xs bg-green-600 text-gray-900 dark:text-white rounded">Approve</button>
+                                <button onClick={() => updateStatus(booking.id, 'rejected')} className="px-2 py-1 text-xs bg-red-600 text-gray-900 dark:text-white rounded">Reject</button>
+                              </>
+                            )}
+                            {booking.status === 'approved' && (
+                              <button onClick={() => updateStatus(booking.id, 'in_progress')} className="px-2 py-1 text-xs bg-blue-500 text-gray-900 dark:text-white rounded">Start Job</button>
+                            )}
+                            {booking.status === 'in_progress' && (
+                              <button onClick={() => setRuntimeModal({ id: booking.id })} className="px-2 py-1 text-xs bg-blue-600 text-gray-900 dark:text-white rounded">Complete Job</button>
+                            )}
+                          </div>
+                        </li>
+                      )
+                    })}
+                  </ul>
                 )}
               </li>
             )
@@ -205,7 +203,6 @@ export default function OwnerPanel() {
             </Link>
           </div>
           {printerList}
-          {bookingList}
         </main>
         {runtimeModal && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">

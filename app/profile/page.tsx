@@ -141,9 +141,11 @@ export default function ProfilePage() {
                       <span className={`text-xs font-semibold px-2 py-1 rounded ${{
                         pending: 'bg-yellow-400 text-black',
                         approved: 'bg-green-600 text-gray-900 dark:text-white',
-                        complete: 'bg-blue-600 text-gray-900 dark:text-white',
+                        rejected: 'bg-red-600 text-gray-900 dark:text-white',
+                        in_progress: 'bg-blue-500 text-gray-900 dark:text-white',
+                        completed: 'bg-blue-600 text-gray-900 dark:text-white',
                         canceled: 'bg-red-600 text-gray-900 dark:text-white',
-                      }[b.status]}`}>{b.status}</span>
+                      }[b.status as keyof any]}`}>{b.status}</span>
                     )}
                   </div>
                   {b.created_at && (

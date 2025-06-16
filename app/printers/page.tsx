@@ -12,7 +12,10 @@ export default function PrintersPage() {
   useEffect(() => {
     const fetchPrinters = async () => {
       const supabase = createPagesBrowserClient();
-      const { data } = await supabase.from('printers').select('*');
+      const { data } = await supabase
+        .from('printers')
+        .select('*')
+        .eq('is_available', true);
       setPrinters(data || []);
       const ids = data?.map((p: any) => p.id) || [];
       if (ids.length > 0) {

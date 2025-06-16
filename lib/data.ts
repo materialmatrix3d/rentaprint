@@ -11,4 +11,5 @@ export interface Printer {
   price_per_hour: number
   description: string | null
   status?: string
+  is_available?: boolean
 }

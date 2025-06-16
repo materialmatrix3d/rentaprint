@@ -40,5 +40,11 @@
     "title": "Owner Panel Update",
     "description": "Edit buttons in the Owner Panel now link to the printer edit screen for easier management.",
     "created_at": "2025-06-16T00:00:00.000Z"
+  },
+  {
+    "id": "67ddf3f6-dca4-47af-adb8-14967d46139f",
+    "title": "Owner Management Improvements",
+    "description": "Added printer availability controls and booking status management for owners.",
+    "created_at": "2025-06-16T21:57:30.000Z"
   }
 ]

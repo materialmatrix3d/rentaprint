@@ -12,6 +12,9 @@ create table if not exists bookings (
   created_at timestamp with time zone default now()
 );
 
+-- Printers table update
+alter table printers add column if not exists is_available boolean default true;
+
 -- Patch Notes Table
 create table if not exists patch_notes (
   id uuid primary key default gen_random_uuid(),
