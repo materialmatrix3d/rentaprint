@@ -9,7 +9,7 @@ interface Booking {
   start_date: string
   end_date: string
   status?: string
-  printers: { name: string }
+  printers: { name: string } | { name: string }[]
 }
 
 export default function ProfilePage() {
@@ -59,7 +59,7 @@ export default function ProfilePage() {
         .gt('start_date', new Date().toISOString())
         .order('start_date', { ascending: true })
 
-      setUpcoming(data || [])
+      setUpcoming((data || []) as Booking[])
       setLoadingBookings(false)
     }
 
@@ -130,7 +130,11 @@ export default function ProfilePage() {
                   return (
                     <li key={b.id} className="p-4 bg-gray-100 dark:bg-gray-700 rounded text-gray-900 dark:text-white space-y-1">
                       <div className="flex items-center justify-between">
-                        <p className="font-medium">{b.printers?.name}</p>
+                        <p className="font-medium">
+                          {Array.isArray(b.printers)
+                            ? b.printers[0]?.name
+                            : b.printers?.name}
+                        </p>
                         {b.status && (
                           <span className={`text-xs font-semibold px-2 py-1 rounded ${{
                             pending: 'bg-yellow-400 text-black',

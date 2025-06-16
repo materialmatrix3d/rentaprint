@@ -14,9 +14,7 @@ interface Booking {
   status: string
   estimated_runtime_hours?: number
   actual_runtime_hours?: number
-  printers: {
-    name: string
-  }
+  printers: { name: string } | { name: string }[]
 }
 
 export default function OwnerPanel() {
@@ -71,7 +69,7 @@ export default function OwnerPanel() {
           .order('start_date', { ascending: false })
 
         if (bookingError) console.error('Error fetching bookings:', bookingError)
-        setBookings(bookingData || [])
+        setBookings((bookingData || []) as Booking[])
       }
       setLoadingBookings(false)
     }
@@ -133,7 +131,11 @@ export default function OwnerPanel() {
                 className="p-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded text-gray-900 dark:text-white space-y-1"
               >
                 <div className="flex items-center justify-between">
-                  <p className="font-medium">{booking.printers.name}</p>
+                  <p className="font-medium">
+                    {Array.isArray(booking.printers)
+                      ? booking.printers[0]?.name
+                      : booking.printers.name}
+                  </p>
                   <span
                     className={`text-xs font-semibold px-2 py-1 rounded ${{
                       pending: 'bg-yellow-400 text-black',

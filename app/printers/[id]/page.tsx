@@ -53,7 +53,7 @@ export default function PrinterDetailPage() {
     <div className="p-6 text-gray-900 dark:text-white max-w-xl space-y-2">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">{printer.name}</h1>
-        <span className={`text-gray-900 dark:text-white text-xs px-2 py-1 rounded ${statusColors[status]}`}>
+        <span className={`text-gray-900 dark:text-white text-xs px-2 py-1 rounded ${statusColors[status as keyof typeof statusColors]}`}>
           {status}
         </span>
       </div>

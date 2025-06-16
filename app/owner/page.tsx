@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import OwnerPanel from './components/OwnerPanelClient'
 
 export default async function OwnerPage() {
-  const { userId } = auth()
+  const { userId } = await auth()
   if (!userId) redirect('/')
   const supabase = createClient()
   const { data } = await supabase.from('printers').select('id').eq('clerk_user_id', userId)

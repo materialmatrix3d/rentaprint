@@ -21,7 +21,7 @@ export default function PrinterCard({ printer, onEdit, onDelete }: Props) {
           {printer.make_model}
         </h3>
           {printer.status && (
-            <span className={`text-gray-900 dark:text-white text-xs px-2 py-1 rounded ${statusColors[printer.status]}`}>
+            <span className={`text-gray-900 dark:text-white text-xs px-2 py-1 rounded ${statusColors[printer.status as keyof typeof statusColors]}`}>
             {printer.status}
           </span>
         )}
