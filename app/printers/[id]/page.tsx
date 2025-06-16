@@ -18,8 +18,7 @@ export default function PrinterDetailPage() {
         .from('printers')
         .select('*')
         .eq('id', id)
-        .eq('is_deleted', false)
-        .single();
+        .single(); // Do not filter out soft-deleted printers here
       const { data: bookings } = await supabase
         .from('bookings')
         .select('start_date, end_date, status')
@@ -57,7 +56,12 @@ export default function PrinterDetailPage() {
   return (
     <div className="p-6 text-gray-900 dark:text-white max-w-xl space-y-2">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">{printer.name}</h1>
+        <h1 className="text-2xl font-bold">
+          {printer.name}{' '}
+          {printer.is_deleted && (
+            <span className="text-sm text-red-400">(This printer has been deleted)</span>
+          )}
+        </h1>
         <span className={`text-gray-900 dark:text-white text-xs px-2 py-1 rounded ${statusColors[status as keyof typeof statusColors]}`}>
           {status}
         </span>

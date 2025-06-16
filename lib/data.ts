@@ -12,4 +12,5 @@ export interface Printer {
   description: string | null
   status?: string
   is_available?: boolean
+  is_deleted?: boolean
 }
