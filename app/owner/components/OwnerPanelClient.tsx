@@ -5,12 +5,13 @@ import Link from 'next/link'
 import { SignedIn, SignedOut, RedirectToSignIn, useUser } from '@clerk/nextjs'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import type { Printer } from '@/lib/data'
+import { bookingStatusClasses, type BookingStatus } from '@/lib/bookings'
 
 interface Booking {
   id: string
   printer_id: string
   clerk_user_id: string
-  status: string
+  status: BookingStatus
   created_at: string
   start_date: string
   end_date: string
@@ -42,7 +43,7 @@ export default function OwnerPanel() {
     }
   }
 
-  const updateStatus = async (id: string, status: string) => {
+  const updateStatus = async (id: string, status: BookingStatus) => {
     const { error } = await supabase.from('bookings').update({ status }).eq('id', id)
     if (error) {
       alert('Failed to update booking')
@@ -149,14 +150,9 @@ export default function OwnerPanel() {
                         <li key={booking.id} className="p-3 border rounded bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white space-y-1">
                           <div className="flex justify-between items-center">
                             <p className="font-medium">{Array.isArray(booking.printers) ? booking.printers[0]?.name : booking.printers.name}</p>
-                            <span className={`text-xs font-semibold px-2 py-1 rounded ${{
-                                pending: 'bg-yellow-400 text-black',
-                                approved: 'bg-green-600 text-gray-900 dark:text-white',
-                                rejected: 'bg-red-600 text-gray-900 dark:text-white',
-                                in_progress: 'bg-blue-500 text-gray-900 dark:text-white',
-                                completed: 'bg-blue-600 text-gray-900 dark:text-white',
-                                canceled: 'bg-red-600 text-gray-900 dark:text-white',
-                              }[booking.status as keyof any]}`}>{booking.status}</span>
+                            <span className={`text-xs font-semibold px-2 py-1 rounded ${
+                                bookingStatusClasses[booking.status]
+                              }`}>{booking.status}</span>
                           </div>
                           <p className="text-xs text-gray-600 dark:text-gray-400">Booked {new Date(booking.created_at).toLocaleString()}</p>
                           <p className="text-sm text-gray-600 dark:text-gray-400">Renter: {booking.clerk_user_id}</p>
