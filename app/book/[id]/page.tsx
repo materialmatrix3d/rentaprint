@@ -100,7 +100,7 @@ export default function BookingPage() {
           />
         </label>
         <p className="text-sm">
-          Estimated Cost: ${'{'}(runtime * (printer.price_per_hour || 0)).toFixed(2){'}'}
+          {`Estimated Cost: $${(runtime * (printer.price_per_hour || 0)).toFixed(2)}`}
         </p>
       </div>
       <button
