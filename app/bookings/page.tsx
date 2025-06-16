@@ -77,7 +77,9 @@ export default function BookingsPage() {
             className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white rounded p-4 mb-4 shadow space-y-2"
           >
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold">{booking.printers.name}</h2>
+              <h2 className="text-lg font-semibold">
+                {booking.printers?.name || 'Unknown Printer'}
+              </h2>
               <span
                 className={`text-xs font-semibold px-2 py-1 rounded ${
                   bookingStatusClasses[booking.status] || 'bg-gray-300 text-black'
