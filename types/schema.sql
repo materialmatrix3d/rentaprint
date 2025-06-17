@@ -15,6 +15,7 @@ create table if not exists bookings (
 -- Printers table update
 alter table printers add column if not exists is_available boolean default true;
 alter table printers add column if not exists is_deleted boolean default false;
+alter table printers add column if not exists is_under_maintenance boolean default false;
 
 -- Patch Notes Table
 create table if not exists patch_notes (
