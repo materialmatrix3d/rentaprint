@@ -33,9 +33,10 @@ export default async function RoadmapPage() {
 
   const noteTitles = new Set(notes.map(n => n.title.toLowerCase()))
 
-  const updated = items.map(item =>
-    noteTitles.has(item.title.toLowerCase()) ? { ...item, status: 'done' } : item
-  )
+  const updated: RoadmapItem[] = items.map(item => ({
+    ...item,
+    status: noteTitles.has(item.title.toLowerCase()) ? 'done' : item.status,
+  }))
 
   const groups = groupByStatus(updated)
 
@@ -45,10 +46,12 @@ export default async function RoadmapPage() {
     done: 'Done',
   }
 
+  const statuses: RoadmapItem['status'][] = ['planned', 'in_progress', 'done']
+
   return (
     <main className="p-6 max-w-4xl mx-auto text-gray-900 dark:text-white">
       <h1 className="text-3xl font-bold mb-6">🚧 Roadmap</h1>
-      {(Object.keys(groups) as RoadmapItem['status'][]).map(status => (
+      {statuses.map(status => (
         groups[status].length > 0 && (
           <section key={status} className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">{statusLabels[status]}</h2>
