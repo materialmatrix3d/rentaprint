@@ -83,5 +83,11 @@
     "title": "Owner Panel Approvals",
     "description": "- Manual booking approvals with Accept/Reject.\n- Awaiting Slice and Ready to Print sections.\n- Bookings grouped by status for easier management.",
     "created_at": "2025-06-25T00:00:00.000Z"
+  },
+  {
+    "id": "66394a65-b709-4d97-93bd-b4e626f4e3d7",
+    "title": "G-code Approval Workflow",
+    "description": "- G-code uploads no longer auto-mark bookings as ready.\n- Owners must approve before jobs move to Ready to Print.",
+    "created_at": "2025-06-26T00:00:00.000Z"
   }
 ]

@@ -58,33 +58,37 @@ const updated: RoadmapItem[] = items.map(item =>
       <h1 className="text-3xl font-bold mb-6">🚧 Roadmap</h1>
       {statusOrder.map(status => (
         groups[status].length > 0 && (
-          <section key={status} className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">{statusLabels[status]}</h2>
-            {groups[status].map((item, idx) => (
-              <div
-                key={`${status}-${idx}`}
-                className="bg-white dark:bg-gray-800 rounded-2xl shadow p-6 mb-6 border border-gray-300 dark:border-gray-700"
-              >
-                <div className="text-xl font-semibold mb-2">{item.title}</div>
-                <p className="mb-2">{item.description}</p>
-                <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                  Priority: {item.priority.charAt(0).toUpperCase() + item.priority.slice(1)}
-                </div>
-                {item.tags && item.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {item.tags.map(tag => (
-                      <span
-                        key={tag}
-                        className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+          <details key={status} className="mb-6" open={status !== 'done'}>
+            <summary className="cursor-pointer select-none bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded text-xl font-semibold">
+              {statusLabels[status]}
+            </summary>
+            <div className="mt-4 space-y-4">
+              {groups[status].map((item, idx) => (
+                <div
+                  key={`${status}-${idx}`}
+                  className="bg-white dark:bg-gray-800 rounded-2xl shadow p-4 border border-gray-300 dark:border-gray-700"
+                >
+                  <div className="font-semibold mb-1">{item.title}</div>
+                  <p className="mb-2 text-sm">{item.description}</p>
+                  <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                    Priority: {item.priority.charAt(0).toUpperCase() + item.priority.slice(1)}
                   </div>
-                )}
-              </div>
-            ))}
-          </section>
+                  {item.tags && item.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {item.tags.map(tag => (
+                        <span
+                          key={tag}
+                          className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </details>
         )
       ))}
     </main>
