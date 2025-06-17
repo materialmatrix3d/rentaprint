@@ -13,6 +13,7 @@ interface Booking {
   clerk_user_id: string
   start_date: string
   end_date: string
+  print_file_url?: string
   printers: { name: string; is_deleted?: boolean }
 }
 
@@ -103,6 +104,16 @@ export default function BookingsPage() {
               >
                 View Printer
               </a>
+              {booking.print_file_url && (
+                <a
+                  href={booking.print_file_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1 text-sm bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded"
+                >
+                  Download Print File
+                </a>
+              )}
               {(['pending', 'approved'] as BookingStatus[]).includes(
                 booking.status
               ) && (

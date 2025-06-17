@@ -14,6 +14,8 @@ export default function BookingPage() {
   const [printer, setPrinter] = useState<Printer | null>(null)
   const [loading, setLoading] = useState(true)
   const [runtime, setRuntime] = useState(1)
+  const [file, setFile] = useState<File | null>(null)
+  const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
     const fetchPrinter = async () => {
@@ -60,28 +62,61 @@ export default function BookingPage() {
       return
     }
 
+    if (file && file.size > 100 * 1024 * 1024) {
+      alert('File must be under 100MB.')
+      return
+    }
+
     const start = new Date()
     const end = new Date(start.getTime() + runtime * 3600 * 1000)
-    const { error } = await supabase.from('bookings').insert({
-      printer_id: id,
-      clerk_user_id: user.id,
-      status: 'pending',
-      start_date: start.toISOString(),
-      end_date: end.toISOString(),
-      estimated_runtime_hours: runtime,
-    })
+    const { data: inserted, error } = await supabase
+      .from('bookings')
+      .insert({
+        printer_id: id,
+        clerk_user_id: user.id,
+        status: 'pending',
+        start_date: start.toISOString(),
+        end_date: end.toISOString(),
+        estimated_runtime_hours: runtime,
+      })
+      .select()
+      .single()
 
-    if (error) {
-      console.error(
-        'Error creating booking:',
-        error.message,
-        error.details ?? ''
-      )
-      alert(`Booking failed: ${error.message}`)
-    } else {
-      alert('Booking successful!')
-      router.push('/bookings')
+    if (error || !inserted) {
+      console.error('Error creating booking:', error)
+      alert(`Booking failed: ${error?.message}`)
+      return
     }
+
+    if (file) {
+      setUploading(true)
+      const path = `booking-files/${inserted.id}/${file.name}`
+      const { error: uploadError } = await supabase.storage
+        .from('print-files')
+        .upload(path, file)
+
+      if (uploadError) {
+        console.error('File upload failed:', uploadError)
+        alert('File upload failed')
+        setUploading(false)
+      } else {
+        const { data: signed, error: signError } = await supabase.storage
+          .from('print-files')
+          .createSignedUrl(path, 60 * 60 * 24 * 7)
+        if (signError) {
+          console.error('URL signing failed:', signError)
+        } else {
+          await supabase
+            .from('bookings')
+            .update({ print_file_url: signed.signedUrl })
+            .eq('id', inserted.id)
+        }
+        setUploading(false)
+      }
+    }
+
+    alert('Booking successful!')
+    router.push('/bookings')
   }
 
   if (loading) return <p>Loading printer...</p>
@@ -136,6 +171,16 @@ export default function BookingPage() {
         <p className="text-sm">
           {`Estimated Cost: $${(runtime * (printer.price_per_hour || 0)).toFixed(2)}`}
         </p>
+        <label className="block text-sm">
+          Optional Print File:
+          <input
+            type="file"
+            accept=".stl,.gcode,.zip"
+            onChange={e => setFile(e.target.files?.[0] || null)}
+            className="mt-1 w-full p-2 border rounded text-black dark:text-white dark:bg-neutral-800"
+          />
+        </label>
+        {uploading && <p className="text-sm">Uploading file...</p>}
       </div>
       <button
         onClick={handleBooking}

@@ -17,6 +17,7 @@ interface Booking {
   end_date: string
   estimated_runtime_hours?: number
   actual_runtime_hours?: number
+  print_file_url?: string
   printers: { name: string } | { name: string }[]
 }
 
@@ -154,7 +155,7 @@ export default function OwnerPanel() {
         const ids = printerData.map((p) => p.id)
         const { data: bookingData, error: bookingError } = await supabase
           .from('bookings')
-          .select('id, printer_id, status, created_at, clerk_user_id, start_date, end_date, estimated_runtime_hours, actual_runtime_hours, printers(name)')
+          .select('id, printer_id, status, created_at, clerk_user_id, start_date, end_date, estimated_runtime_hours, actual_runtime_hours, print_file_url, printers(name)')
           .in('printer_id', ids)
           .eq('printers.is_deleted', false)
           .order('start_date', { ascending: false })
@@ -235,6 +236,16 @@ export default function OwnerPanel() {
                           <p className="text-sm text-gray-600 dark:text-gray-400">Renter: {booking.clerk_user_id}</p>
                           <p className="text-sm text-gray-600 dark:text-gray-400">Start: {start.toLocaleString()}</p>
                           <p className="text-sm text-gray-600 dark:text-gray-400">Est: {booking.estimated_runtime_hours ?? hours} hrs{booking.actual_runtime_hours && ` • Actual: ${booking.actual_runtime_hours} hrs`}</p>
+                          {booking.print_file_url && (
+                            <a
+                              href={booking.print_file_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-sm text-blue-600 dark:text-blue-400 underline"
+                            >
+                              Download Print File
+                            </a>
+                          )}
                           <div className="flex gap-2 flex-wrap pt-1">
                             {booking.status === 'pending' && (
                               <>
