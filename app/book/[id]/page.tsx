@@ -47,6 +47,18 @@ export default function BookingPage() {
       alert('Please enter a valid runtime in hours.')
       return
     }
+    if (
+      printer &&
+      (runtime < (printer.min_runtime_hours ?? 1) ||
+        runtime > (printer.max_runtime_hours ?? 24))
+    ) {
+      alert(
+        `Please enter a runtime between ${
+          printer.min_runtime_hours ?? 1
+        } and ${printer.max_runtime_hours ?? 24} hours.`
+      )
+      return
+    }
 
     const start = new Date()
     const end = new Date(start.getTime() + runtime * 3600 * 1000)
@@ -116,6 +128,11 @@ export default function BookingPage() {
             className="mt-1 w-full p-2 border rounded text-black dark:text-white dark:bg-neutral-800"
           />
         </label>
+        <p className="text-sm">
+          {`Runtime must be between ${printer.min_runtime_hours ?? 1} and ${
+            printer.max_runtime_hours ?? 24
+          } hours.`}
+        </p>
         <p className="text-sm">
           {`Estimated Cost: $${(runtime * (printer.price_per_hour || 0)).toFixed(2)}`}
         </p>

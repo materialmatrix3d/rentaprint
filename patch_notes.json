@@ -1,5 +1,11 @@
 [
   {
+    "id": "f383b9bf-6ff3-48cf-973e-309b88b78d89",
+    "title": "Custom Booking Runtime Limits",
+    "description": "- Added min and max runtime hours per printer.\n- Booking form enforces these limits.",
+    "created_at": "2025-06-19T00:00:00.000Z"
+  },
+  {
     "id": "05a8860e-aa28-43a0-949e-b2456483874c",
     "title": "Printer Maintenance Mode",
     "description": "- Owners can mark printers as under maintenance.\n- Bookings are blocked when a printer is under maintenance.\n- Maintenance status is shown on printer pages.",

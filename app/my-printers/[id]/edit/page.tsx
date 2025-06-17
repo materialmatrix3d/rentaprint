@@ -13,6 +13,8 @@ export default function EditPrinterPage() {
     materials: '',
     buildVolume: '',
     pricePerHour: '',
+    minRuntime: '',
+    maxRuntime: '',
     description: ''
   })
 
@@ -30,6 +32,8 @@ export default function EditPrinterPage() {
           materials: data.materials.join(', '),
           buildVolume: data.build_volume,
           pricePerHour: data.price_per_hour.toString(),
+          minRuntime: (data.min_runtime_hours ?? '').toString(),
+          maxRuntime: (data.max_runtime_hours ?? '').toString(),
           description: data.description
         })
       }
@@ -50,6 +54,8 @@ export default function EditPrinterPage() {
       materials: form.materials.split(',').map(m => m.trim()),
       build_volume: form.buildVolume,
       price_per_hour: parseFloat(form.pricePerHour),
+      min_runtime_hours: form.minRuntime ? parseFloat(form.minRuntime) : null,
+      max_runtime_hours: form.maxRuntime ? parseFloat(form.maxRuntime) : null,
       description: form.description
     }).eq('id', id)
 
@@ -65,6 +71,8 @@ export default function EditPrinterPage() {
         <input name="materials" value={form.materials} onChange={handleChange} placeholder="Materials (comma separated)" className="w-full p-2 border rounded" required />
         <input name="buildVolume" value={form.buildVolume} onChange={handleChange} placeholder="Build Volume (e.g. 220x220x250mm)" className="w-full p-2 border rounded" required />
         <input name="pricePerHour" value={form.pricePerHour} onChange={handleChange} placeholder="Price per Hour ($)" type="number" step="0.01" className="w-full p-2 border rounded" required />
+        <input name="minRuntime" value={form.minRuntime} onChange={handleChange} placeholder="Min Runtime Hours" type="number" className="w-full p-2 border rounded" />
+        <input name="maxRuntime" value={form.maxRuntime} onChange={handleChange} placeholder="Max Runtime Hours" type="number" className="w-full p-2 border rounded" />
         <textarea name="description" value={form.description} onChange={handleChange} placeholder="Printer Description" className="w-full p-2 border rounded" />
         <button type="submit" className="bg-blue-600 text-gray-900 dark:text-white px-4 py-2 rounded">Update Printer</button>
       </form>
