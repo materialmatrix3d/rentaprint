@@ -33,6 +33,7 @@ export default async function RoadmapPage() {
 
   const noteTitles = new Set(notes.map(n => n.title.toLowerCase()))
 
+  // Mark items as done at runtime if a patch note shares its title
   const updated: RoadmapItem[] = items.map(item =>
     noteTitles.has(item.title.toLowerCase())
       ? { ...item, status: 'done' as const }
@@ -47,6 +48,7 @@ export default async function RoadmapPage() {
     done: 'Done',
   }
 
+  // Keep "Done" last regardless of object key order
   const statuses: RoadmapItem['status'][] = ['planned', 'in_progress', 'done']
 
   return (
