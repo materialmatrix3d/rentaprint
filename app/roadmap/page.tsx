@@ -38,8 +38,6 @@ const updated: RoadmapItem[] = items.map(item =>
   noteTitles.has(item.title.toLowerCase()) ? { ...item, status: 'done' } : item
 )
 
-  )
-
   const groups = groupByStatus(updated)
 
   const statusLabels: Record<RoadmapItem['status'], string> = {
