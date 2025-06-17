@@ -9,7 +9,7 @@ import { Printer, User, UploadCloud, Search, Star } from "lucide-react";
 export default function Home() {
 
   return (
-    <main className="max-w-5xl mx-auto p-6 md:p-10 space-y-16 text-gray-900 dark:text-gray-100">
+    <main className="max-w-7xl mx-auto p-6 md:p-10 space-y-16 text-gray-900 dark:text-gray-100">
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -24,8 +24,8 @@ export default function Home() {
             className="w-full h-full bg-gradient-to-br from-blue-200 via-purple-200 to-pink-200 dark:from-blue-900 dark:via-purple-900 dark:to-pink-900 blur-2xl opacity-30"
           />
         </div>
-        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-          <div className="space-y-6 text-center md:text-left">
+        <div className="grid md:grid-cols-2 gap-y-8 gap-x-8 md:gap-x-12 items-center">
+          <div className="space-y-6 text-center md:text-left px-4 md:px-12">
             <h1 className="text-4xl md:text-5xl font-bold">
               Rent 3D Printers Near You — Fast, Flexible, On-Demand.
             </h1>
