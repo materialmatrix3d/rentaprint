@@ -90,8 +90,7 @@ export default function BookingPage() {
 
     if (file) {
       setUploading(true)
-      const safeName = encodeURIComponent(file.name)
-      const path = `booking-files/${inserted.id}/${safeName}`
+      const path = `booking-files/${inserted.id}/${file.name}`
       const { error: uploadError } = await supabase.storage
         .from('print-files')
         .upload(path, file)
