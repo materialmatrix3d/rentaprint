@@ -21,6 +21,7 @@ export default function BookingsPage() {
   const supabase = useMemo(() => createClientComponentClient(), []);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [pendingMap, setPendingMap] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -30,7 +31,23 @@ export default function BookingsPage() {
         .eq('clerk_user_id', user?.id);
 
       if (error) console.error(error);
-      else setBookings(data || []);
+      else {
+        setBookings(data || []);
+
+        const ids = data?.map(b => b.id) || [];
+        if (ids.length > 0) {
+          const { data: requests } = await supabase
+            .from('booking_change_requests')
+            .select('booking_id, status')
+            .in('booking_id', ids);
+
+          const map: Record<string, boolean> = {};
+          requests?.forEach(r => {
+            if (r.status === 'pending') map[r.booking_id as string] = true;
+          });
+          setPendingMap(map);
+        }
+      }
       setLoading(false);
     };
 
@@ -103,9 +120,7 @@ export default function BookingsPage() {
               >
                 View Printer
               </a>
-              {(['pending', 'approved'] as BookingStatus[]).includes(
-                booking.status
-              ) && (
+              {booking.status === 'pending' && (
                 <button
                   onClick={() => cancelBooking(booking.id)}
                   className="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-gray-900 dark:text-white rounded"
@@ -113,15 +128,34 @@ export default function BookingsPage() {
                   Cancel Booking
                 </button>
               )}
-              {new Date(booking.start_date) > new Date() &&
-                !['canceled', 'rejected'].includes(booking.status) && (
-                  <Link
-                    href={`/bookings/change/${booking.id}`}
-                    className="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-gray-900 dark:text-white rounded"
-                  >
-                    Request Change
-                  </Link>
-                )}
+              {booking.status === 'pending' && !pendingMap[booking.id] && (
+                <button
+                  onClick={async () => {
+                    const new_start = prompt('Enter new start date (YYYY-MM-DD):')
+                    const new_end = prompt('Enter new end date (YYYY-MM-DD):')
+                    const reason = prompt('Optional: Why are you requesting a change?')
+
+                    if (!new_start || !new_end) return
+
+                    const res = await fetch('/api/bookings/request-change', {
+                      method: 'POST',
+                      body: JSON.stringify({
+                        booking_id: booking.id,
+                        new_start_date: new_start,
+                        new_end_date: new_end,
+                        reason,
+                      }),
+                      headers: { 'Content-Type': 'application/json' },
+                    })
+
+                    if (res.ok) alert('Change request sent!')
+                    else alert('Something went wrong.')
+                  }}
+                  className="px-3 py-1 text-sm bg-green-600 hover:bg-green-700 text-gray-900 dark:text-white rounded"
+                >
+                  Request Change
+                </button>
+              )}
               {booking.status === 'canceled' && (
                 <button
                   onClick={() => deleteBooking(booking.id)}
