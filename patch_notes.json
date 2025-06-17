@@ -1,74 +1,38 @@
 [
   {
-    "id": "af9ce1d7-d105-4eca-9a02-6ee1b425ea99",
-    "title": "Major updates",
-    "description": "Improved booking cancellation errors, cleaned duplicate components, clarified test instructions, and fixed environment example.",
-    "created_at": "2024-01-01T00:00:00.000Z"
-  },
-  {
-    "id": "5777d4b1-f16b-4160-ad0f-011b48ca9621",
-    "title": "Initial Release",
-    "description": "First public version of RentAPrint",
-    "created_at": "2025-06-14T02:43:02.000Z"
-  },
-  {
-    "id": "1b0ae62f-961f-4eee-94f5-d8d558c9a3e2",
-    "title": "Bug Fixes",
-    "description": "Resolved booking issues and improved printer search.",
-    "created_at": "2025-06-14T02:43:02.000Z"
-  },
-  {
-    "id": "207900e9-1a1f-4c9b-8b3e-380fb7ee28bc",
-    "title": "Owner Panel Page",
-    "description": "Added a fully functional Owner Panel page with printer and booking summaries.",
-    "created_at": "2025-06-14T02:44:00.000Z"
-  },
-  {
-    "id": "1d80e8a5-a980-4d19-9678-0a39e4939d72",
-    "title": "My Printers Page",
-    "description": "Built the My Printers page, allowing users to view, edit, delete, and manage their printer listings.",
-    "created_at": "2025-06-14T02:45:00.000Z"
-  },
-  {
-    "id": "43acb14c-7639-4204-af1a-bc0a122ab13a",
-    "title": "Profile Page",
-    "description": "Populated the Profile page with user details, account actions, printer/bookings stats, and upcoming bookings display.",
-    "created_at": "2025-06-14T02:46:00.000Z"
-  },
-  {
-    "id": "4ed11556-c66e-4e85-a15f-b0d201c883e4",
-    "title": "Owner Panel Update",
-    "description": "Edit buttons in the Owner Panel now link to the printer edit screen for easier management.",
-    "created_at": "2025-06-16T00:00:00.000Z"
-  },
-  {
-    "id": "67ddf3f6-dca4-47af-adb8-14967d46139f",
-    "title": "Owner Management Improvements",
-    "description": "Added printer availability controls and booking status management for owners.",
-    "created_at": "2025-06-16T21:57:30.000Z"
-  },
-  {
-    "id": "31bab597-f36c-4def-99f2-e92f9d4e306b",
-    "title": "Fix View Deleted Printers",
-    "description": "Viewing a soft-deleted printer no longer hangs and now shows a deleted label.",
-    "created_at": "2025-06-16T22:20:00.000Z"
+    "id": "1125df0b-772a-43e4-aa73-003902c00379",
+    "title": "Owner Panel & Empty State UX",
+    "description": "- Resolved 'Not Authorized' message when owners had no printers.\n- Added prompt to create a new listing.\n- Added friendly message on the printers page when no listings are available.",
+    "created_at": "2025-06-17T00:12:18.000Z"
   },
   {
     "id": "e33841df-68bb-4c0f-9927-2e1070f1f569",
-    "title": "Soft Delete Support",
-    "description": "Implemented soft delete for printers, preserved historical bookings and visibility, fixed \"Unknown Printer\" display, allowed viewing deleted printers, and hid the booking button for deleted listings.",
+    "title": "Soft Delete System",
+    "description": "- Implemented soft delete for printers, preserving historical bookings and visibility.\n- Viewing deleted printers no longer hangs and shows a deleted label.\n- Fixed 'Unknown Printer' display and hid booking button for deleted listings.",
     "created_at": "2025-06-16T22:45:00.000Z"
   },
   {
-    "id": "1125df0b-772a-43e4-aa73-003902c00379",
-    "title": "Owner Panel Authorization Fix",
-    "description": "Resolved \"Not Authorized\" message when owners had no printers and added helpful prompt to create a new listing.",
-    "created_at": "2025-06-17T00:00:00.000Z"
+    "id": "67ddf3f6-dca4-47af-adb8-14967d46139f",
+    "title": "Owner Panel Enhancements",
+    "description": "- Edit buttons in the Owner Panel now link to the printer edit screen.\n- Added printer availability controls and booking status management for owners.",
+    "created_at": "2025-06-16T21:57:30.000Z"
   },
   {
-    "id": "e8d25b1b-98f3-4ccd-8b3a-9dba3a0c2119",
-    "title": "Printers Empty State",
-    "description": "Added a friendly message on the printers page when no listings are available.",
-    "created_at": "2025-06-17T00:12:18.000Z"
+    "id": "43acb14c-7639-4204-af1a-bc0a122ab13a",
+    "title": "Dashboard Launch",
+    "description": "- Added a fully functional Owner Panel with printer and booking summaries.\n- Built the My Printers page for managing listings.\n- Populated the Profile page with user details, account actions, and upcoming bookings.",
+    "created_at": "2025-06-14T02:46:00.000Z"
+  },
+  {
+    "id": "5777d4b1-f16b-4160-ad0f-011b48ca9621",
+    "title": "Initial Public Release",
+    "description": "- First public version of RentAPrint.\n- Resolved booking issues and improved printer search.",
+    "created_at": "2025-06-14T02:43:02.000Z"
+  },
+  {
+    "id": "af9ce1d7-d105-4eca-9a02-6ee1b425ea99",
+    "title": "Major Updates",
+    "description": "- Improved booking cancellation errors.\n- Cleaned duplicate components.\n- Clarified test instructions and fixed environment example.",
+    "created_at": "2024-01-01T00:00:00.000Z"
   }
 ]
