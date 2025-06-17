@@ -3,8 +3,14 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Printer, User, UploadCloud, Search, Star } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <main className="max-w-5xl mx-auto p-6 md:p-10 space-y-16 text-gray-900 dark:text-gray-100">
       <motion.section
@@ -47,14 +53,20 @@ export default function Home() {
             </div>
           </div>
           <div className="flex justify-center md:justify-end">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-              className="w-64 h-64 md:w-80 md:h-80 flex items-center justify-center"
-            >
-              <Printer className="w-full h-full text-blue-500 dark:text-blue-400" />
-            </motion.div>
+            {mounted ? (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.8 }}
+                className="w-64 h-64 md:w-80 md:h-80 flex items-center justify-center"
+              >
+                <Printer className="w-full h-full text-blue-500 dark:text-blue-400" />
+              </motion.div>
+            ) : (
+              <div className="w-64 h-64 md:w-80 md:h-80 flex items-center justify-center">
+                <Printer className="w-full h-full text-blue-500 dark:text-blue-400" />
+              </div>
+            )}
           </div>
         </div>
       </motion.section>
