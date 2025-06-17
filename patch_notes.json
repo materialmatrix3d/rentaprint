@@ -1,5 +1,11 @@
 [
   {
+    "id": "b078c8d6-a711-4a93-ae6e-48204acac209",
+    "title": "File Upload Fixes",
+    "description": "- Resolved 400 errors from incorrect bucket paths.\n- Filenames are properly encoded.\n- Improved upload failure messages.",
+    "created_at": "2025-06-23T00:00:00.000Z"
+  },
+  {
     "id": "b9a3898a-54d2-48bd-a1f2-c1b5ac309b56",
     "title": "Optional Print File Uploads",
     "description": "- Users can attach STL, GCODE, or ZIP files when booking.\n- Owners can download the file from the Owner Panel.",
