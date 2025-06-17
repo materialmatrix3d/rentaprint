@@ -11,27 +11,51 @@ export default function Home() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="space-y-8 text-center"
+        className="relative py-12 md:py-20"
       >
-        <h1 className="text-4xl md:text-5xl font-bold">
-          Rent 3D Printers Near You — Fast, Flexible, On-Demand.
-        </h1>
-        <div className="flex justify-center gap-4 flex-wrap">
-          <Link
-            href="/printers"
-            className="px-6 py-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
-          >
-            Browse Printers
-          </Link>
-          <Link
-            href="/printers/new"
-            className="px-6 py-3 rounded-lg bg-green-600 text-white hover:bg-green-700"
-          >
-            List Your Printer
-          </Link>
+        <div className="absolute inset-0 -z-10 overflow-hidden rounded-lg">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1 }}
+            className="w-full h-full bg-gradient-to-br from-blue-200 via-purple-200 to-pink-200 dark:from-blue-900 dark:via-purple-900 dark:to-pink-900 blur-2xl opacity-30 animate-pulse"
+          />
         </div>
-        <div className="w-full h-64 bg-gray-200 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-          <span className="text-gray-500">[Hero Illustration]</span>
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="space-y-6 text-center md:text-left">
+            <h1 className="text-4xl md:text-5xl font-bold">
+              Rent 3D Printers Near You — Fast, Flexible, On-Demand.
+            </h1>
+            <p className="text-lg text-gray-700 dark:text-gray-300">
+              Browse and book 3D printers by the hour. No ownership required. List your own to earn income.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
+              <Link
+                href="/printers"
+                className="flex items-center gap-2 px-6 py-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+              >
+                <Search className="h-5 w-5" />
+                Browse Printers
+              </Link>
+              <Link
+                href="/printers/new"
+                className="flex items-center gap-2 px-6 py-3 rounded-lg bg-green-600 text-white hover:bg-green-700"
+              >
+                <UploadCloud className="h-5 w-5" />
+                List Your Printer
+              </Link>
+            </div>
+          </div>
+          <div className="flex justify-center md:justify-end">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className="w-64 h-64 md:w-80 md:h-80 flex items-center justify-center"
+            >
+              <Printer className="w-full h-full text-blue-500 dark:text-blue-400" />
+            </motion.div>
+          </div>
         </div>
       </motion.section>
 
