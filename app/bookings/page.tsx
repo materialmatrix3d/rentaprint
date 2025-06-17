@@ -128,7 +128,8 @@ export default function BookingsPage() {
                   Cancel Booking
                 </button>
               )}
-              {booking.status === 'pending' && !pendingMap[booking.id] && (
+              {!['completed', 'canceled'].includes(booking.status) &&
+                !pendingMap[booking.id] && (
                 <button
                   onClick={async () => {
                     const new_start = prompt('Enter new start date (YYYY-MM-DD):')
