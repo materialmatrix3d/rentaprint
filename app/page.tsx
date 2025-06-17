@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Printer, User, UploadCloud, Search, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 
+
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -24,7 +25,7 @@ export default function Home() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1 }}
-            className="w-full h-full bg-gradient-to-br from-blue-200 via-purple-200 to-pink-200 dark:from-blue-900 dark:via-purple-900 dark:to-pink-900 blur-2xl opacity-30 animate-pulse"
+            className="w-full h-full bg-gradient-to-br from-blue-200 via-purple-200 to-pink-200 dark:from-blue-900 dark:via-purple-900 dark:to-pink-900 blur-2xl opacity-30"
           />
         </div>
         <div className="grid md:grid-cols-2 gap-8 items-center">
