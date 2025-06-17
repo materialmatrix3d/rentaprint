@@ -14,6 +14,10 @@ interface Booking {
   start_date: string
   end_date: string
   print_file_url?: string
+  layer_height?: string | null
+  infill?: string | null
+  supports?: boolean | null
+  print_notes?: string | null
   printers: { name: string; is_deleted?: boolean }
 }
 
@@ -114,7 +118,7 @@ export default function BookingsPage() {
                   Download Print File
                 </a>
               )}
-              {(['pending', 'approved'] as BookingStatus[]).includes(
+              {(['pending', 'awaiting_slice'] as BookingStatus[]).includes(
                 booking.status
               ) && (
                 <button
@@ -124,7 +128,12 @@ export default function BookingsPage() {
                   Cancel Booking
                 </button>
               )}
-              {!['completed', 'canceled'].includes(booking.status) && (
+              {![
+                'complete',
+                'canceled',
+                'ready_to_print',
+                'printing',
+              ].includes(booking.status) && (
                 <button
                   onClick={async () => {
                     const new_start = prompt('Enter new start date (YYYY-MM-DD):')

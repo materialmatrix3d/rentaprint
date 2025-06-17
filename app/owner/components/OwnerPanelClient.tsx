@@ -18,6 +18,10 @@ interface Booking {
   estimated_runtime_hours?: number
   actual_runtime_hours?: number
   print_file_url?: string
+  layer_height?: string | null
+  infill?: string | null
+  supports?: boolean | null
+  print_notes?: string | null
   printers: { name: string } | { name: string }[]
 }
 
@@ -50,6 +54,7 @@ export default function OwnerPanel() {
   const [loadingRequests, setLoadingRequests] = useState(true)
   const [runtimeModal, setRuntimeModal] = useState<{ id: string } | null>(null)
   const [actualRuntime, setActualRuntime] = useState('')
+  const [sliceUploads, setSliceUploads] = useState<Record<string, File | null>>({})
 
   const toggleAvailability = async (id: string, current: boolean) => {
     const { error } = await supabase
@@ -90,7 +95,7 @@ export default function OwnerPanel() {
     if (!runtimeModal) return
     const { error } = await supabase
       .from('bookings')
-      .update({ actual_runtime_hours: parseFloat(actualRuntime), status: 'completed' })
+      .update({ actual_runtime_hours: parseFloat(actualRuntime), status: 'complete' })
       .eq('id', runtimeModal.id)
 
     if (error) {
@@ -99,12 +104,45 @@ export default function OwnerPanel() {
     } else {
       setBookings(
         bookings.map(b =>
-          b.id === runtimeModal.id ? { ...b, status: 'completed', actual_runtime_hours: parseFloat(actualRuntime) } : b
+          b.id === runtimeModal.id ? { ...b, status: 'complete', actual_runtime_hours: parseFloat(actualRuntime) } : b
         )
       )
     }
     setActualRuntime('')
     setRuntimeModal(null)
+  }
+
+  const uploadSlice = async (bookingId: string) => {
+    const file = sliceUploads[bookingId]
+    if (!file) return
+    const path = `booking-files/${bookingId}/sliced.gcode`
+    const { error: uploadError } = await supabase.storage
+      .from('print-files')
+      .upload(path, file, { upsert: true })
+    if (uploadError) {
+      alert('Failed to upload G-code')
+      console.error(uploadError)
+      return
+    }
+    const { data: signed, error } = await supabase.storage
+      .from('print-files')
+      .createSignedUrl(path, 60 * 60 * 24 * 7)
+    if (error || !signed) {
+      alert('Failed to sign G-code URL')
+      return
+    }
+    await supabase
+      .from('bookings')
+      .update({ print_file_url: signed.signedUrl, status: 'ready_to_print' })
+      .eq('id', bookingId)
+    setBookings(
+      bookings.map(b =>
+        b.id === bookingId
+          ? { ...b, print_file_url: signed.signedUrl, status: 'ready_to_print' }
+          : b
+      )
+    )
+    setSliceUploads({ ...sliceUploads, [bookingId]: null })
   }
 
   const handleRequest = async (req: ChangeRequest, approve: boolean) => {
@@ -155,7 +193,7 @@ export default function OwnerPanel() {
         const ids = printerData.map((p) => p.id)
         const { data: bookingData, error: bookingError } = await supabase
           .from('bookings')
-          .select('id, printer_id, status, created_at, clerk_user_id, start_date, end_date, estimated_runtime_hours, actual_runtime_hours, print_file_url, printers(name)')
+          .select('id, printer_id, status, created_at, clerk_user_id, start_date, end_date, estimated_runtime_hours, actual_runtime_hours, print_file_url, layer_height, infill, supports, print_notes, printers(name)')
           .in('printer_id', ids)
           .eq('printers.is_deleted', false)
           .order('start_date', { ascending: false })
@@ -185,6 +223,47 @@ export default function OwnerPanel() {
 
     if (user?.id) fetchData()
   }, [user])
+
+  const sliceBookings = bookings.filter(b => b.status === 'awaiting_slice')
+
+  const sliceList = (
+    <section>
+      <h2 className="text-xl font-semibold mb-2">Awaiting Slice</h2>
+      {sliceBookings.length === 0 ? (
+        <p>No bookings need slicing.</p>
+      ) : (
+        <ul className="space-y-3">
+          {sliceBookings.map(b => (
+            <li key={b.id} className="p-3 border rounded bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white space-y-1">
+              <p className="font-medium">Booking {b.id}</p>
+              {b.print_file_url && (
+                <a href={b.print_file_url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 dark:text-blue-400 underline">
+                  Download STL
+                </a>
+              )}
+              <p className="text-sm">Layer Height: {b.layer_height || 'N/A'}</p>
+              <p className="text-sm">Infill: {b.infill || 'N/A'}</p>
+              <p className="text-sm">Supports: {b.supports ? 'Yes' : 'No'}</p>
+              {b.print_notes && <p className="text-sm">Notes: {b.print_notes}</p>}
+              <input
+                type="file"
+                accept=".gcode"
+                onChange={e => setSliceUploads({ ...sliceUploads, [b.id]: e.target.files?.[0] || null })}
+                className="block mt-1 w-full text-sm text-black dark:text-white"
+              />
+              <button
+                onClick={() => uploadSlice(b.id)}
+                disabled={!sliceUploads[b.id]}
+                className="mt-2 px-2 py-1 text-xs bg-blue-600 text-gray-900 dark:text-white rounded disabled:opacity-50"
+              >
+                Upload G-code
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  )
 
   const printerList = (
     <section>
@@ -247,16 +326,10 @@ export default function OwnerPanel() {
                             </a>
                           )}
                           <div className="flex gap-2 flex-wrap pt-1">
-                            {booking.status === 'pending' && (
-                              <>
-                                <button onClick={() => updateStatus(booking.id, 'approved')} className="px-2 py-1 text-xs bg-green-600 text-gray-900 dark:text-white rounded">Approve</button>
-                                <button onClick={() => updateStatus(booking.id, 'rejected')} className="px-2 py-1 text-xs bg-red-600 text-gray-900 dark:text-white rounded">Reject</button>
-                              </>
+                            {booking.status === 'ready_to_print' && (
+                              <button onClick={() => updateStatus(booking.id, 'printing')} className="px-2 py-1 text-xs bg-blue-500 text-gray-900 dark:text-white rounded">Start Job</button>
                             )}
-                            {booking.status === 'approved' && (
-                              <button onClick={() => updateStatus(booking.id, 'in_progress')} className="px-2 py-1 text-xs bg-blue-500 text-gray-900 dark:text-white rounded">Start Job</button>
-                            )}
-                            {booking.status === 'in_progress' && (
+                            {booking.status === 'printing' && (
                               <button onClick={() => setRuntimeModal({ id: booking.id })} className="px-2 py-1 text-xs bg-blue-600 text-gray-900 dark:text-white rounded">Complete Job</button>
                             )}
                           </div>
@@ -316,6 +389,7 @@ export default function OwnerPanel() {
               Create New Listing
             </Link>
           </div>
+          {sliceList}
           {printerList}
           {requestList}
         </main>

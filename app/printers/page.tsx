@@ -29,7 +29,7 @@ export default function PrintersPage() {
         bookings?.forEach(b => {
           const start = new Date(b.start_date as string);
           const end = new Date(b.end_date as string);
-          if (b.status === 'approved' && start <= now && end >= now) {
+          if ((b.status === 'printing' || b.status === 'ready_to_print') && start <= now && end >= now) {
             map[b.printer_id as string] = true;
           }
         });

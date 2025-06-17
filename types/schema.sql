@@ -9,11 +9,19 @@ create table if not exists bookings (
   estimated_runtime_hours numeric,
   actual_runtime_hours numeric,
   print_file_url text,
+  layer_height text,
+  infill text,
+  supports boolean,
+  print_notes text,
   status text default 'pending',
   created_at timestamp with time zone default now()
 );
 
 alter table bookings add column if not exists print_file_url text;
+alter table bookings add column if not exists layer_height text;
+alter table bookings add column if not exists infill text;
+alter table bookings add column if not exists supports boolean;
+alter table bookings add column if not exists print_notes text;
 
 -- Printers table update
 alter table printers add column if not exists is_available boolean default true;
