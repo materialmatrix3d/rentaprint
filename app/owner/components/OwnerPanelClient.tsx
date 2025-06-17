@@ -20,14 +20,33 @@ interface Booking {
   printers: { name: string } | { name: string }[]
 }
 
+interface ChangeRequest {
+  id: string
+  booking_id: string
+  new_start_date: string
+  new_end_date: string
+  new_runtime_hours: number | null
+  status: string
+  bookings: {
+    id: string
+    printer_id: string
+    start_date: string
+    end_date: string
+    estimated_runtime_hours?: number
+    printers: { name: string } | { name: string }[]
+  }
+}
+
 export default function OwnerPanel() {
   const { user } = useUser()
   const supabase = useMemo(() => createClientComponentClient(), [])
 
   const [printers, setPrinters] = useState<Printer[]>([])
   const [bookings, setBookings] = useState<Booking[]>([])
+  const [changeRequests, setChangeRequests] = useState<ChangeRequest[]>([])
   const [loadingPrinters, setLoadingPrinters] = useState(true)
   const [loadingBookings, setLoadingBookings] = useState(true)
+  const [loadingRequests, setLoadingRequests] = useState(true)
   const [runtimeModal, setRuntimeModal] = useState<{ id: string } | null>(null)
   const [actualRuntime, setActualRuntime] = useState('')
 
@@ -87,6 +106,33 @@ export default function OwnerPanel() {
     setRuntimeModal(null)
   }
 
+  const handleRequest = async (req: ChangeRequest, approve: boolean) => {
+    if (approve) {
+      await supabase
+        .from('bookings')
+        .update({
+          start_date: req.new_start_date,
+          end_date: req.new_end_date,
+          estimated_runtime_hours: req.new_runtime_hours,
+        })
+        .eq('id', req.booking_id)
+    }
+    await supabase
+      .from('booking_change_requests')
+      .update({ status: approve ? 'approved' : 'rejected' })
+      .eq('id', req.id)
+    setChangeRequests(changeRequests.filter(r => r.id !== req.id))
+    if (approve) {
+      setBookings(
+        bookings.map(b =>
+          b.id === req.booking_id
+            ? { ...b, start_date: req.new_start_date, end_date: req.new_end_date, estimated_runtime_hours: req.new_runtime_hours ?? b.estimated_runtime_hours }
+            : b
+        )
+      )
+    }
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       const { data: printerData, error: printerError } = await supabase
@@ -120,6 +166,18 @@ export default function OwnerPanel() {
             bookingError.details ?? ''
           )
         setBookings((bookingData || []) as Booking[])
+
+        const { data: requestData, error: requestError } = await supabase
+          .from('booking_change_requests')
+          .select('*, bookings(id, printer_id, start_date, end_date, estimated_runtime_hours, printers(name))')
+          .in('bookings.printer_id', ids)
+          .eq('status', 'pending')
+
+        if (requestError) {
+          console.error('Error fetching change requests:', requestError)
+        }
+        setChangeRequests((requestData || []) as ChangeRequest[])
+        setLoadingRequests(false)
       }
       setLoadingBookings(false)
     }
@@ -204,6 +262,36 @@ export default function OwnerPanel() {
     </section>
   )
 
+  const requestList = (
+    <section>
+      <h2 className="text-xl font-semibold mb-2">Change Requests</h2>
+      {loadingRequests ? (
+        <p>Loading requests...</p>
+      ) : changeRequests.length === 0 ? (
+        <p>No pending change requests.</p>
+      ) : (
+        <ul className="space-y-3">
+          {changeRequests.map(req => {
+            const b = req.bookings
+            const start = new Date(req.new_start_date)
+            const hours = req.new_runtime_hours ?? Math.round((new Date(req.new_end_date).getTime() - start.getTime()) / 3600000)
+            return (
+              <li key={req.id} className="p-3 border rounded bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white space-y-1">
+                <p className="font-medium">{Array.isArray(b.printers) ? b.printers[0]?.name : b.printers.name}</p>
+                <p className="text-sm">Proposed Start: {start.toLocaleString()}</p>
+                <p className="text-sm">Proposed Duration: {hours} hrs</p>
+                <div className="flex gap-2 pt-1">
+                  <button onClick={() => handleRequest(req, true)} className="px-2 py-1 text-xs bg-green-600 text-gray-900 dark:text-white rounded">Approve</button>
+                  <button onClick={() => handleRequest(req, false)} className="px-2 py-1 text-xs bg-red-600 text-gray-900 dark:text-white rounded">Reject</button>
+                </div>
+              </li>
+            )
+          })}
+        </ul>
+      )}
+    </section>
+  )
+
   return (
     <>
       <SignedIn>
@@ -218,6 +306,7 @@ export default function OwnerPanel() {
             </Link>
           </div>
           {printerList}
+          {requestList}
         </main>
         {runtimeModal && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
