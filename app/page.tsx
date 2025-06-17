@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Printer, User, UploadCloud, Search, Star } from "lucide-react";
+import { IconCube3dSphere } from "@tabler/icons-react";
 
 
 
@@ -56,7 +57,7 @@ export default function Home() {
               transition={{ delay: 0.2, duration: 0.8 }}
               className="w-64 h-64 md:w-80 md:h-80 flex items-center justify-center rounded-2xl shadow-xl"
             >
-              <Printer className="w-full h-full text-blue-500 dark:text-blue-400" />
+              <IconCube3dSphere className="w-28 h-28 md:w-40 md:h-40 text-blue-400" />
             </motion.div>
           </div>
         </div>
