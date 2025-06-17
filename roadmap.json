@@ -4,27 +4,50 @@
     "description": "Allow users to estimate material usage per booking and charge based on owner-defined cost per gram.",
     "status": "planned",
     "priority": "medium",
-    "tags": ["pricing", "owner-tools"]
+    "tags": [
+      "pricing",
+      "owner-tools"
+    ]
   },
   {
     "title": "Review System",
     "description": "Allow users to leave reviews and ratings for completed bookings. Ratings should be visible on the printer listing.",
     "status": "planned",
     "priority": "high",
-    "tags": ["reviews", "user-feedback"]
+    "tags": [
+      "reviews",
+      "user-feedback"
+    ]
   },
   {
     "title": "Owner Earnings Dashboard",
     "description": "Show a breakdown of total earnings for owners, with charts grouped by booking, printer, or month.",
     "status": "planned",
     "priority": "medium",
-    "tags": ["analytics", "owner-tools"]
+    "tags": [
+      "analytics",
+      "owner-tools"
+    ]
   },
   {
     "title": "Printer Tags & Filtering",
     "description": "Let owners add tags to their printers (e.g. PLA, high-speed, multi-color) and allow users to filter results by tag.",
     "status": "planned",
     "priority": "medium",
-    "tags": ["search", "printer-features"]
+    "tags": [
+      "search",
+      "printer-features"
+    ]
+  },
+  {
+    "title": "Listing Cap & Paid Tiers",
+    "description": "Introduce a free listing cap (e.g. 2 printers) for owners, with paid subscription tiers to unlock more. Enforce cap in UI and database, and allow tier-based upgrades later via Stripe or Supabase roles.",
+    "status": "planned",
+    "priority": "high",
+    "tags": [
+      "monetization",
+      "owner-tools",
+      "growth"
+    ]
   }
 ]
