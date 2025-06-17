@@ -16,6 +16,10 @@ export default function BookingPage() {
   const [runtime, setRuntime] = useState(1)
   const [file, setFile] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
+  const [layerHeight, setLayerHeight] = useState('')
+  const [infill, setInfill] = useState('')
+  const [supports, setSupports] = useState('')
+  const [notes, setNotes] = useState('')
 
   useEffect(() => {
     const fetchPrinter = async () => {
@@ -69,15 +73,30 @@ export default function BookingPage() {
 
     const start = new Date()
     const end = new Date(start.getTime() + runtime * 3600 * 1000)
+    const ext = file?.name.split('.').pop()?.toLowerCase()
+    let status: string = 'pending'
+    if (file) {
+      if (ext === 'gcode') status = 'ready_to_print'
+      else if (
+        ext === 'stl' &&
+        (layerHeight || infill || supports)
+      )
+        status = 'awaiting_slice'
+    }
+
     const { data: inserted, error } = await supabase
       .from('bookings')
       .insert({
         printer_id: id,
         clerk_user_id: user.id,
-        status: 'pending',
+        status,
         start_date: start.toISOString(),
         end_date: end.toISOString(),
         estimated_runtime_hours: runtime,
+        layer_height: layerHeight || null,
+        infill: infill || null,
+        supports: supports ? supports === 'yes' : null,
+        print_notes: notes || null,
       })
       .select()
       .single()
@@ -181,6 +200,64 @@ export default function BookingPage() {
             type="file"
             accept=".stl,.gcode,.zip"
             onChange={e => setFile(e.target.files?.[0] || null)}
+            className="mt-1 w-full p-2 border rounded text-black dark:text-white dark:bg-neutral-800"
+          />
+        </label>
+        <label className="block text-sm">
+          Layer Height:
+          <select
+            value={layerHeight}
+            onChange={e => setLayerHeight(e.target.value)}
+            className="mt-1 w-full p-2 border rounded text-black dark:text-white dark:bg-neutral-800"
+          >
+            <option value="">Select</option>
+            <option value="0.1mm">0.1mm</option>
+            <option value="0.2mm">0.2mm</option>
+            <option value="0.3mm">0.3mm</option>
+          </select>
+        </label>
+        <label className="block text-sm">
+          Infill:
+          <select
+            value={infill}
+            onChange={e => setInfill(e.target.value)}
+            className="mt-1 w-full p-2 border rounded text-black dark:text-white dark:bg-neutral-800"
+          >
+            <option value="">Select</option>
+            <option value="10%">10%</option>
+            <option value="20%">20%</option>
+            <option value="50%">50%</option>
+            <option value="100%">100%</option>
+          </select>
+        </label>
+        <fieldset className="block text-sm">
+          <legend>Supports:</legend>
+          <label className="mr-2">
+            <input
+              type="radio"
+              name="supports"
+              value="yes"
+              checked={supports === 'yes'}
+              onChange={e => setSupports(e.target.value)}
+            />
+            Yes
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="supports"
+              value="no"
+              checked={supports === 'no'}
+              onChange={e => setSupports(e.target.value)}
+            />
+            No
+          </label>
+        </fieldset>
+        <label className="block text-sm">
+          Print Notes:
+          <textarea
+            value={notes}
+            onChange={e => setNotes(e.target.value)}
             className="mt-1 w-full p-2 border rounded text-black dark:text-white dark:bg-neutral-800"
           />
         </label>

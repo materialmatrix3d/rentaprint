@@ -30,11 +30,11 @@ export default function PrinterDetailPage() {
       for (const b of bookings || []) {
         const start = new Date(b.start_date);
         const end = new Date(b.end_date);
-        if (b.status === 'approved' && start <= now && end >= now) {
+        if ((b.status === 'printing' || b.status === 'ready_to_print') && start <= now && end >= now) {
           computedStatus = 'rented';
           break;
         }
-        if (b.status === 'pending' && start >= now) {
+        if ((b.status === 'pending' || b.status === 'awaiting_slice') && start >= now) {
           computedStatus = 'pending';
         }
       }
