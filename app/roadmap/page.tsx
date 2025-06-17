@@ -20,10 +20,26 @@ function groupByStatus(items: RoadmapItem[]) {
 }
 
 export default async function RoadmapPage() {
-  const filePath = path.join(process.cwd(), 'roadmap.json')
-  const file = await fs.readFile(filePath, 'utf-8')
-  const items: RoadmapItem[] = JSON.parse(file)
-  const groups = groupByStatus(items)
+  const roadmapPath = path.join(process.cwd(), 'roadmap.json')
+  const notesPath = path.join(process.cwd(), 'patch_notes.json')
+
+  const [roadmapFile, notesFile] = await Promise.all([
+    fs.readFile(roadmapPath, 'utf-8'),
+    fs.readFile(notesPath, 'utf-8'),
+  ])
+
+  const items: RoadmapItem[] = JSON.parse(roadmapFile)
+  const notes: { title: string }[] = JSON.parse(notesFile)
+
+  const noteTitles = new Set(notes.map(n => n.title.toLowerCase()))
+
+  const updated: RoadmapItem[] = items.map(item =>
+    noteTitles.has(item.title.toLowerCase())
+      ? { ...item, status: 'done' as const }
+      : item
+  )
+
+  const groups = groupByStatus(updated)
 
   const statusLabels: Record<RoadmapItem['status'], string> = {
     planned: 'Planned',
@@ -31,10 +47,12 @@ export default async function RoadmapPage() {
     done: 'Done',
   }
 
+  const statuses: RoadmapItem['status'][] = ['planned', 'in_progress', 'done']
+
   return (
     <main className="p-6 max-w-4xl mx-auto text-gray-900 dark:text-white">
       <h1 className="text-3xl font-bold mb-6">🚧 Roadmap</h1>
-      {(Object.keys(groups) as RoadmapItem['status'][]).map(status => (
+      {statuses.map(status => (
         groups[status].length > 0 && (
           <section key={status} className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">{statusLabels[status]}</h2>
