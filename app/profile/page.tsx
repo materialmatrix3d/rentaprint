@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from 'react'
 import { SignedIn, SignedOut, RedirectToSignIn, useUser, UserButton, useClerk } from '@clerk/nextjs'
+import Link from 'next/link'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { bookingStatusClasses, type BookingStatus } from '@/lib/bookings'
 
@@ -153,6 +154,12 @@ export default function ProfilePage() {
                   )}
                   <p className="text-sm">Start: {start.toLocaleString()}</p>
                       <p className="text-sm">Duration: {hours} hrs</p>
+                      <Link
+                        href={`/bookings/change/${b.id}`}
+                        className="inline-block mt-1 px-2 py-1 text-xs bg-blue-600 hover:bg-blue-700 text-gray-900 dark:text-white rounded"
+                      >
+                        Request Change
+                      </Link>
                     </li>
                   )
                 })}

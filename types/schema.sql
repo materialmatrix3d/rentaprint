@@ -36,3 +36,14 @@ create table if not exists reviews (
   comment text,
   created_at timestamp with time zone default now()
 );
+
+-- Booking Change Requests Table
+create table if not exists booking_change_requests (
+  id uuid primary key default gen_random_uuid(),
+  booking_id uuid references bookings(id),
+  new_start_date timestamp with time zone,
+  new_end_date timestamp with time zone,
+  new_runtime_hours numeric,
+  status text default 'pending',
+  created_at timestamp with time zone default now()
+);

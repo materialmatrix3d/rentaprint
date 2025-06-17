@@ -1,5 +1,11 @@
 [
   {
+    "id": "26c4f7d4-c13c-4891-8672-ac1ac2a86bf8",
+    "title": "Booking Change Requests",
+    "description": "- Users can request changes to bookings.\n- Owners approve or reject from the Owner Panel.",
+    "created_at": "2025-06-20T00:00:00.000Z"
+  },
+  {
     "id": "f383b9bf-6ff3-48cf-973e-309b88b78d89",
     "title": "Custom Booking Runtime Limits",
     "description": "- Added min and max runtime hours per printer.\n- Booking form enforces these limits.",
