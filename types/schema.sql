@@ -8,9 +8,12 @@ create table if not exists bookings (
   end_date timestamp with time zone,
   estimated_runtime_hours numeric,
   actual_runtime_hours numeric,
+  print_file_url text,
   status text default 'pending',
   created_at timestamp with time zone default now()
 );
+
+alter table bookings add column if not exists print_file_url text;
 
 -- Printers table update
 alter table printers add column if not exists is_available boolean default true;
