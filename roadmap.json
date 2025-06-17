@@ -1,0 +1,9 @@
+[
+  {
+    "title": "Material Cost Integration",
+    "description": "Allow users to estimate material usage per booking and charge based on owner-defined cost per gram.",
+    "status": "planned",
+    "priority": "medium",
+    "tags": ["pricing", "owner-tools"]
+  }
+]
