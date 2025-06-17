@@ -14,7 +14,7 @@ export default function Home() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative py-12 md:py-20"
+        className="relative z-0 py-12 md:py-20"
       >
         <div className="absolute inset-0 -z-10 overflow-hidden rounded-lg">
           <motion.div
