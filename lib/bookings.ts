@@ -4,7 +4,8 @@ export type BookingStatus =
   | 'ready_to_print'
   | 'printing'
   | 'complete'
-  | 'canceled';
+  | 'canceled'
+  | 'rejected';
 
 export const bookingStatusClasses: Record<BookingStatus, string> = {
   pending: 'bg-yellow-400 text-black',
@@ -13,4 +14,5 @@ export const bookingStatusClasses: Record<BookingStatus, string> = {
   printing: 'bg-blue-500 text-gray-900 dark:text-white',
   complete: 'bg-blue-600 text-gray-900 dark:text-white',
   canceled: 'bg-red-600 text-gray-900 dark:text-white',
+  rejected: 'bg-red-500 text-gray-900 dark:text-white',
 };

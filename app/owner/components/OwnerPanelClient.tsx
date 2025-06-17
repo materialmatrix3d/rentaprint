@@ -91,6 +91,19 @@ export default function OwnerPanel() {
     }
   }
 
+  const acceptBooking = async (booking: Booking) => {
+    let next: BookingStatus = 'ready_to_print'
+    if (booking.print_file_url) {
+      const ext = booking.print_file_url.split('?')[0].split('.').pop()?.toLowerCase()
+      if (ext === 'stl') next = 'awaiting_slice'
+    }
+    await updateStatus(booking.id, next)
+  }
+
+  const rejectBooking = async (id: string) => {
+    await updateStatus(id, 'rejected')
+  }
+
   const submitRuntime = async () => {
     if (!runtimeModal) return
     const { error } = await supabase
@@ -224,7 +237,37 @@ export default function OwnerPanel() {
     if (user?.id) fetchData()
   }, [user])
 
+  const pendingBookings = bookings.filter(b => b.status === 'pending')
   const sliceBookings = bookings.filter(b => b.status === 'awaiting_slice')
+  const readyBookings = bookings.filter(b => b.status === 'ready_to_print')
+  const printingBookings = bookings.filter(b => b.status === 'printing')
+  const completeBookings = bookings.filter(b => b.status === 'complete')
+  const rejectedBookings = bookings.filter(b => b.status === 'rejected')
+  
+  const pendingList = (
+    <section>
+      <h2 className="text-xl font-semibold mb-2">Pending Approvals</h2>
+      {pendingBookings.length === 0 ? (
+        <p>No pending bookings.</p>
+      ) : (
+        <ul className="space-y-3">
+          {pendingBookings.map(b => (
+            <li key={b.id} className="p-3 border rounded bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white space-y-1">
+              <p className="font-medium">{Array.isArray(b.printers) ? b.printers[0]?.name : b.printers.name}</p>
+              <p className="text-sm">Renter: {b.clerk_user_id}</p>
+              <p className="text-sm">
+                {new Date(b.start_date).toLocaleString()} - {new Date(b.end_date).toLocaleString()}
+              </p>
+              <div className="flex gap-2 pt-1">
+                <button onClick={() => acceptBooking(b)} className="px-2 py-1 text-xs bg-green-600 text-gray-900 dark:text-white rounded">Accept</button>
+                <button onClick={() => rejectBooking(b.id)} className="px-2 py-1 text-xs bg-red-600 text-gray-900 dark:text-white rounded">Reject</button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  )
 
   const sliceList = (
     <section>
@@ -256,8 +299,94 @@ export default function OwnerPanel() {
                 disabled={!sliceUploads[b.id]}
                 className="mt-2 px-2 py-1 text-xs bg-blue-600 text-gray-900 dark:text-white rounded disabled:opacity-50"
               >
-                Upload G-code
+                Mark Ready
               </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  )
+
+  const readyList = (
+    <section>
+      <h2 className="text-xl font-semibold mb-2">Ready to Print</h2>
+      {readyBookings.length === 0 ? (
+        <p>No jobs ready to print.</p>
+      ) : (
+        <ul className="space-y-3">
+          {readyBookings.map(b => (
+            <li key={b.id} className="p-3 border rounded bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white space-y-1">
+              <p className="font-medium">{Array.isArray(b.printers) ? b.printers[0]?.name : b.printers.name}</p>
+              {b.print_file_url && (
+                <a href={b.print_file_url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 dark:text-blue-400 underline">
+                  Download G-code
+                </a>
+              )}
+              <div className="flex gap-2 pt-1">
+                <button onClick={() => updateStatus(b.id, 'printing')} className="px-2 py-1 text-xs bg-blue-500 text-gray-900 dark:text-white rounded">Start Job</button>
+                <button onClick={() => updateStatus(b.id, 'complete')} className="px-2 py-1 text-xs bg-blue-600 text-gray-900 dark:text-white rounded">Mark Complete</button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  )
+
+  const printingList = (
+    <section>
+      <h2 className="text-xl font-semibold mb-2">Printing</h2>
+      {printingBookings.length === 0 ? (
+        <p>No active prints.</p>
+      ) : (
+        <ul className="space-y-3">
+          {printingBookings.map(b => (
+            <li key={b.id} className="p-3 border rounded bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white space-y-1">
+              <p className="font-medium">{Array.isArray(b.printers) ? b.printers[0]?.name : b.printers.name}</p>
+              {b.print_file_url && (
+                <a href={b.print_file_url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 dark:text-blue-400 underline">
+                  Download G-code
+                </a>
+              )}
+              <div className="flex gap-2 pt-1">
+                <button onClick={() => setRuntimeModal({ id: b.id })} className="px-2 py-1 text-xs bg-blue-600 text-gray-900 dark:text-white rounded">Complete Job</button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  )
+
+  const completeList = (
+    <section>
+      <h2 className="text-xl font-semibold mb-2">Completed</h2>
+      {completeBookings.length === 0 ? (
+        <p>No completed bookings.</p>
+      ) : (
+        <ul className="space-y-3">
+          {completeBookings.map(b => (
+            <li key={b.id} className="p-3 border rounded bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white space-y-1">
+              <p className="font-medium">{Array.isArray(b.printers) ? b.printers[0]?.name : b.printers.name}</p>
+              <p className="text-sm">Runtime: {b.actual_runtime_hours ?? b.estimated_runtime_hours ?? ''} hrs</p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  )
+
+  const rejectedList = (
+    <section>
+      <h2 className="text-xl font-semibold mb-2">Rejected</h2>
+      {rejectedBookings.length === 0 ? (
+        <p>No rejected bookings.</p>
+      ) : (
+        <ul className="space-y-3">
+          {rejectedBookings.map(b => (
+            <li key={b.id} className="p-3 border rounded bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white space-y-1">
+              <p className="font-medium">{Array.isArray(b.printers) ? b.printers[0]?.name : b.printers.name}</p>
             </li>
           ))}
         </ul>
@@ -389,7 +518,12 @@ export default function OwnerPanel() {
               Create New Listing
             </Link>
           </div>
+          {pendingList}
           {sliceList}
+          {readyList}
+          {printingList}
+          {completeList}
+          {rejectedList}
           {printerList}
           {requestList}
         </main>
