@@ -1,5 +1,11 @@
 [
   {
+    "id": "7504a37f-543f-4b38-ab34-6a105194134c",
+    "title": "Roadmap Expansion",
+    "description": "- Added Review System to the roadmap.\n- Added Owner Earnings Dashboard to the roadmap.\n- Added Printer Tags & Filtering to the roadmap.",
+    "created_at": "2025-06-21T00:00:00.000Z"
+  },
+  {
     "id": "26c4f7d4-c13c-4891-8672-ac1ac2a86bf8",
     "title": "Booking Change Requests",
     "description": "- Users can request changes to bookings.\n- Owners approve or reject from the Owner Panel.",
