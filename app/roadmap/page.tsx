@@ -49,12 +49,16 @@ export default async function RoadmapPage() {
   }
 
   // Keep "Done" last regardless of object key order
-  const statuses: RoadmapItem['status'][] = ['planned', 'in_progress', 'done']
+  const statusOrder: RoadmapItem['status'][] = [
+    'planned',
+    'in_progress',
+    'done',
+  ]
 
   return (
     <main className="p-6 max-w-4xl mx-auto text-gray-900 dark:text-white">
       <h1 className="text-3xl font-bold mb-6">🚧 Roadmap</h1>
-      {statuses.map(status => (
+      {statusOrder.map(status => (
         groups[status].length > 0 && (
           <section key={status} className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">{statusLabels[status]}</h2>
