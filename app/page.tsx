@@ -24,8 +24,9 @@ export default function Home() {
             className="w-full h-full bg-gradient-to-br from-blue-200 via-purple-200 to-pink-200 dark:from-blue-900 dark:via-purple-900 dark:to-pink-900 blur-2xl opacity-30"
           />
         </div>
-        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-          <div className="space-y-6 text-center md:text-left">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12">
+          <div className="flex items-center">
+            <div className="space-y-6 text-center md:text-left">
             <h1 className="text-4xl md:text-5xl font-bold">
               Rent 3D Printers Near You — Fast, Flexible, On-Demand.
             </h1>
@@ -48,8 +49,9 @@ export default function Home() {
                 List Your Printer
               </Link>
             </div>
+            </div>
           </div>
-          <div className="flex justify-center md:justify-end">
+          <div className="flex items-center justify-center md:justify-end pl-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
