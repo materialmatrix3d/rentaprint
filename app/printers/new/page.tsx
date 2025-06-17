@@ -1,11 +1,12 @@
 'use client';
 
 import { useUser } from '@clerk/nextjs';
+import Link from 'next/link';
 import { useState } from 'react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 export default function NewPrinterPage() {
-  const { user, isLoaded } = useUser();
+  const { user, isLoaded, isSignedIn } = useUser();
   const [formData, setFormData] = useState({
     make_model: '',
     printer_name: '',
@@ -15,6 +16,17 @@ export default function NewPrinterPage() {
     description: '',
   });
   const [status, setStatus] = useState('');
+
+  if (!isSignedIn) {
+    return (
+      <div className="text-center mt-10">
+        <p className="text-red-500">Please sign in to create a printer listing.</p>
+        <Link href="/sign-in">
+          <button className="bg-blue-600 text-white px-4 py-2 rounded mt-4">Sign In</button>
+        </Link>
+      </div>
+    );
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
