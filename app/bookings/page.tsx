@@ -113,15 +113,34 @@ export default function BookingsPage() {
                   Cancel Booking
                 </button>
               )}
-              {new Date(booking.start_date) > new Date() &&
-                !['canceled', 'rejected'].includes(booking.status) && (
-                  <Link
-                    href={`/bookings/change/${booking.id}`}
-                    className="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-gray-900 dark:text-white rounded"
-                  >
-                    Request Change
-                  </Link>
-                )}
+              {!['completed', 'canceled'].includes(booking.status) && (
+                <button
+                  onClick={async () => {
+                    const new_start = prompt('Enter new start date (YYYY-MM-DD):')
+                    const new_end = prompt('Enter new end date (YYYY-MM-DD):')
+                    const reason = prompt('Optional: Why are you requesting a change?')
+
+                    if (!new_start || !new_end) return
+
+                    const res = await fetch('/api/bookings/request-change', {
+                      method: 'POST',
+                      body: JSON.stringify({
+                        booking_id: booking.id,
+                        new_start_date: new_start,
+                        new_end_date: new_end,
+                        reason,
+                      }),
+                      headers: { 'Content-Type': 'application/json' },
+                    })
+
+                    if (res.ok) alert('Change request sent!')
+                    else alert('Something went wrong.')
+                  }}
+                  className="px-3 py-1 text-sm bg-green-600 hover:bg-green-700 text-gray-900 dark:text-white rounded"
+                >
+                  Request Change
+                </button>
+              )}
               {booking.status === 'canceled' && (
                 <button
                   onClick={() => deleteBooking(booking.id)}
