@@ -1,6 +1,8 @@
-import Link from 'next/link'
-import { motion } from 'framer-motion'
-import { Printer, User, UploadCloud, Search, Star } from 'lucide-react'
+"use client";
+
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Printer, User, UploadCloud, Search, Star } from "lucide-react";
 
 export default function Home() {
   return (
