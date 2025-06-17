@@ -1,16 +1,10 @@
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import { Printer, User, UploadCloud, Search, Star } from 'lucide-react'
 
 export default function Home() {
   return (
     <main className="max-w-5xl mx-auto p-6 md:p-10 space-y-16 text-gray-900 dark:text-gray-100">
-      <motion.section
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="space-y-8 text-center"
-      >
+      <section className="space-y-8 text-center">
         <h1 className="text-4xl md:text-5xl font-bold">
           Rent 3D Printers Near You — Fast, Flexible, On-Demand.
         </h1>
@@ -31,14 +25,9 @@ export default function Home() {
         <div className="w-full h-64 bg-gray-200 dark:bg-gray-800 rounded-lg flex items-center justify-center">
           <span className="text-gray-500">[Hero Illustration]</span>
         </div>
-      </motion.section>
+      </section>
 
-      <motion.section
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.5 }}
-        className="grid md:grid-cols-2 gap-8"
-      >
+      <section className="grid md:grid-cols-2 gap-8">
         <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 space-y-4 text-center">
           <User className="mx-auto h-10 w-10 text-blue-500" />
           <h2 className="text-2xl font-semibold">For Renters</h2>
@@ -61,7 +50,7 @@ export default function Home() {
             Start Here
           </Link>
         </div>
-      </motion.section>
+      </section>
 
       <section className="space-y-8">
         <h2 className="text-3xl font-bold text-center">How It Works</h2>
