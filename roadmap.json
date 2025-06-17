@@ -115,5 +115,17 @@
       "owner-tools",
       "conversion"
     ]
+  },
+  {
+    "title": "Mobile Version of the Website",
+    "description": "Build a responsive mobile-friendly version of the RentAPrint platform. Prioritize accessibility and usability on screens smaller than 640px using Tailwind CSS utilities. Key pages like homepage, listings, bookings, profile, and owner panel should adapt smoothly to mobile devices.",
+    "status": "planned",
+    "priority": "high",
+    "tags": [
+      "mobile",
+      "responsive",
+      "usability"
+    ]
   }
 ]
+
