@@ -76,8 +76,7 @@ export default function BookingPage() {
     const ext = file?.name.split('.').pop()?.toLowerCase()
     let status: string = 'pending'
     if (file) {
-      if (ext === 'gcode') status = 'ready_to_print'
-      else if (
+      if (
         ext === 'stl' &&
         (layerHeight || infill || supports)
       )
