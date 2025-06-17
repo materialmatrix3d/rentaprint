@@ -58,12 +58,17 @@
     "title": "Soft Delete Support",
     "description": "Implemented soft delete for printers, preserved historical bookings and visibility, fixed \"Unknown Printer\" display, allowed viewing deleted printers, and hid the booking button for deleted listings.",
     "created_at": "2025-06-16T22:45:00.000Z"
-  }
-  ,
+  },
   {
     "id": "1125df0b-772a-43e4-aa73-003902c00379",
     "title": "Owner Panel Authorization Fix",
     "description": "Resolved \"Not Authorized\" message when owners had no printers and added helpful prompt to create a new listing.",
     "created_at": "2025-06-17T00:00:00.000Z"
+  },
+  {
+    "id": "e8d25b1b-98f3-4ccd-8b3a-9dba3a0c2119",
+    "title": "Printers Empty State",
+    "description": "Added a friendly message on the printers page when no listings are available.",
+    "created_at": "2025-06-17T00:12:18.000Z"
   }
 ]

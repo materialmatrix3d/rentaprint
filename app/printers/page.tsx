@@ -42,18 +42,25 @@ export default function PrintersPage() {
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Available Printers</h2>
-      <div className="flex flex-col gap-4 items-start">
-        {printers.map((printer) => (
-          <div key={printer.id} className="relative">
-            <PrinterCard printer={printer} />
-            {rented[printer.id] && (
-              <span className="absolute inset-0 bg-black/50 text-white flex items-center justify-center font-semibold pointer-events-none rounded">
-                Currently Rented
-              </span>
-            )}
-          </div>
-        ))}
-      </div>
+      {printers.length === 0 ? (
+        <div className="text-center mt-10 text-gray-400 flex flex-col items-center">
+          <span className="text-6xl mb-2">🖨️</span>
+          <p>No printers available yet. Check back soon!</p>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-4 items-start">
+          {printers.map(printer => (
+            <div key={printer.id} className="relative">
+              <PrinterCard printer={printer} />
+              {rented[printer.id] && (
+                <span className="absolute inset-0 bg-black/50 text-white flex items-center justify-center font-semibold pointer-events-none rounded">
+                  Currently Rented
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
