@@ -33,11 +33,11 @@ export default async function RoadmapPage() {
 
   const noteTitles = new Set(notes.map(n => n.title.toLowerCase()))
 
-  // Mark items as done at runtime if a patch note shares its title
-  const updated: RoadmapItem[] = items.map(item =>
-    noteTitles.has(item.title.toLowerCase())
-      ? { ...item, status: 'done' as const }
-      : item
+// Mark items as done at runtime if a patch note shares its title
+const updated: RoadmapItem[] = items.map(item =>
+  noteTitles.has(item.title.toLowerCase()) ? { ...item, status: 'done' } : item
+)
+
   )
 
   const groups = groupByStatus(updated)
