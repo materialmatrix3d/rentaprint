@@ -35,6 +35,48 @@
     "tags": ["monetization", "owner-tools", "growth"]
   },
   {
+    "title": "Multi-Material Support Tags",
+    "description": "Allow owners to tag printers with special capabilities like dual extrusion, resin printing, or multicolor support. Renters can filter by these tags.",
+    "status": "planned",
+    "priority": "medium",
+    "tags": ["printer-features", "search", "filters"]
+  },
+  {
+    "title": "Booking History Export",
+    "description": "Let owners export their booking history and earnings as a downloadable CSV file for analysis or taxes.",
+    "status": "planned",
+    "priority": "low",
+    "tags": ["owner-tools", "analytics", "reports"]
+  },
+  {
+    "title": "Renter/Owner Messaging System",
+    "description": "Add a messaging thread to booking pages so renters and owners can communicate directly, clarify print jobs, or request changes.",
+    "status": "planned",
+    "priority": "high",
+    "tags": ["communication", "user-experience", "support"]
+  },
+  {
+    "title": "Referral Program",
+    "description": "Give users a referral code or link to share. Referred users get a discount; the referrer earns credit or tips.",
+    "status": "planned",
+    "priority": "medium",
+    "tags": ["growth", "marketing", "rewards"]
+  },
+  {
+    "title": "Printer Comparison Tool",
+    "description": "Allow renters to compare multiple printer listings by price, rating, materials, and print volume in a side-by-side view.",
+    "status": "planned",
+    "priority": "low",
+    "tags": ["search", "user-experience", "discovery"]
+  },
+  {
+    "title": "Owner Onboarding Checklist",
+    "description": "Add a guided checklist to help new owners complete their printer listing setup (photo, pricing, materials, etc).",
+    "status": "planned",
+    "priority": "medium",
+    "tags": ["onboarding", "owner-tools", "conversion"]
+  },
+  {
     "title": "Verified Printer Badge",
     "description": "Allow owners to verify their identity or printer setup by paying a one-time fee. Verified printers appear with a badge and may be prioritized in search results.",
     "status": "planned",
@@ -61,5 +103,12 @@
     "status": "planned",
     "priority": "high",
     "tags": ["enterprise", "subscriptions", "scaling"]
+  },
+  {
+    "title": "Mobile Version of the Website",
+    "description": "Create a responsive mobile layout for the RentAPrint platform. Optimize key pages (homepage, listings, bookings, profile, owner panel) for screens below 640px using Tailwind CSS. Ensure full functionality and smooth UX on mobile.",
+    "status": "planned",
+    "priority": "medium",
+    "tags": ["ux", "responsive", "mobile"]
   }
 ]
