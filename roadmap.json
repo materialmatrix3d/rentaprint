@@ -49,5 +49,48 @@
       "owner-tools",
       "growth"
     ]
+  },
+  {
+    "title": "Verified Printer Badge",
+    "description": "Allow owners to verify their identity or printer setup by paying a one-time fee. Verified printers appear with a badge and may be prioritized in search results.",
+    "status": "planned",
+    "priority": "medium",
+    "tags": [
+      "monetization",
+      "trust",
+      "owner-tools"
+    ]
+  },
+  {
+    "title": "Tipping System",
+    "description": "Allow renters to optionally tip printer owners or the platform at checkout, using Stripe.",
+    "status": "planned",
+    "priority": "low",
+    "tags": [
+      "monetization",
+      "user-experience"
+    ]
+  },
+  {
+    "title": "STL / G-code Marketplace",
+    "description": "Let owners upload and sell STL or pre-sliced G-code files to renters or other makers, earning revenue from their designs.",
+    "status": "planned",
+    "priority": "medium",
+    "tags": [
+      "marketplace",
+      "monetization",
+      "files"
+    ]
+  },
+  {
+    "title": "White-Label / Teams Tier",
+    "description": "Introduce team accounts for farms, schools, or businesses to manage multiple printers, admins, and bookings under a single subscription.",
+    "status": "planned",
+    "priority": "high",
+    "tags": [
+      "enterprise",
+      "subscriptions",
+      "scaling"
+    ]
   }
 ]
