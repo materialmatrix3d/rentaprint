@@ -34,6 +34,10 @@ export default function BookingPage() {
   }, [id])
 
   const handleBooking = async () => {
+    if (printer?.is_under_maintenance) {
+      alert('This printer is currently under maintenance and cannot be booked.')
+      return
+    }
     if (!user) {
       alert('You must be logged in to book a printer.')
       return
@@ -97,6 +101,9 @@ export default function BookingPage() {
       <p>
         <strong>Make/Model:</strong> {printer.make_model || 'N/A'}
       </p>
+      {printer.is_under_maintenance && (
+        <p className="text-red-500 mt-2">This printer is under maintenance.</p>
+      )}
       <div className="pt-2 space-y-2">
         <label className="block text-sm">
           Estimated Runtime (hrs):
@@ -115,7 +122,8 @@ export default function BookingPage() {
       </div>
       <button
         onClick={handleBooking}
-        className="mt-4 px-4 py-2 bg-blue-600 text-gray-900 dark:text-white rounded hover:bg-blue-700"
+        disabled={printer.is_under_maintenance}
+        className="mt-4 px-4 py-2 bg-blue-600 text-gray-900 dark:text-white rounded hover:bg-blue-700 disabled:opacity-50"
       >
         Confirm Booking
       </button>

@@ -43,6 +43,20 @@ export default function OwnerPanel() {
     }
   }
 
+  const toggleMaintenance = async (id: string, current: boolean) => {
+    const { error } = await supabase
+      .from('printers')
+      .update({ is_under_maintenance: !current })
+      .eq('id', id)
+    if (error) {
+      alert('Failed to update maintenance status')
+    } else {
+      setPrinters(printers.map(p => (
+        p.id === id ? { ...p, is_under_maintenance: !current } : p
+      )))
+    }
+  }
+
   const updateStatus = async (id: string, status: BookingStatus) => {
     const { error } = await supabase.from('bookings').update({ status }).eq('id', id)
     if (error) {
@@ -139,6 +153,9 @@ export default function OwnerPanel() {
                     <Link href={`/my-printers/${printer.id}/edit`} className="px-3 py-1 text-sm bg-yellow-400 text-black rounded hover:bg-yellow-500">Edit</Link>
                     <button onClick={() => toggleAvailability(printer.id, printer.is_available ?? true)} className="px-3 py-1 text-sm bg-gray-300 dark:bg-gray-600 text-black dark:text-white rounded hover:bg-gray-400 dark:hover:bg-gray-500">
                       {printer.is_available ? 'Set Unavailable' : 'Set Available'}
+                    </button>
+                    <button onClick={() => toggleMaintenance(printer.id, printer.is_under_maintenance ?? false)} className="px-3 py-1 text-sm bg-gray-300 dark:bg-gray-600 text-black dark:text-white rounded hover:bg-gray-400 dark:hover:bg-gray-500">
+                      {printer.is_under_maintenance ? 'End Maintenance' : 'Start Maintenance'}
                     </button>
                   </div>
                 </div>

@@ -13,4 +13,5 @@ export interface Printer {
   status?: string
   is_available?: boolean
   is_deleted?: boolean
+  is_under_maintenance?: boolean
 }
