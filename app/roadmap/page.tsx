@@ -20,10 +20,24 @@ function groupByStatus(items: RoadmapItem[]) {
 }
 
 export default async function RoadmapPage() {
-  const filePath = path.join(process.cwd(), 'roadmap.json')
-  const file = await fs.readFile(filePath, 'utf-8')
-  const items: RoadmapItem[] = JSON.parse(file)
-  const groups = groupByStatus(items)
+  const roadmapPath = path.join(process.cwd(), 'roadmap.json')
+  const notesPath = path.join(process.cwd(), 'patch_notes.json')
+
+  const [roadmapFile, notesFile] = await Promise.all([
+    fs.readFile(roadmapPath, 'utf-8'),
+    fs.readFile(notesPath, 'utf-8'),
+  ])
+
+  const items: RoadmapItem[] = JSON.parse(roadmapFile)
+  const notes: { title: string }[] = JSON.parse(notesFile)
+
+  const noteTitles = new Set(notes.map(n => n.title.toLowerCase()))
+
+  const updated = items.map(item =>
+    noteTitles.has(item.title.toLowerCase()) ? { ...item, status: 'done' } : item
+  )
+
+  const groups = groupByStatus(updated)
 
   const statusLabels: Record<RoadmapItem['status'], string> = {
     planned: 'Planned',
