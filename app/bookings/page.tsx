@@ -133,6 +133,7 @@ export default function BookingsPage() {
                 'canceled',
                 'ready_to_print',
                 'printing',
+                'rejected',
               ].includes(booking.status) && (
                 <button
                   onClick={async () => {
