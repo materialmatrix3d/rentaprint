@@ -14,4 +14,6 @@ export interface Printer {
   is_available?: boolean
   is_deleted?: boolean
   is_under_maintenance?: boolean
+  min_runtime_hours?: number
+  max_runtime_hours?: number
 }
