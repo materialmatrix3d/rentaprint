@@ -98,7 +98,11 @@ export default function BookingPage() {
 
       if (uploadError) {
         console.error('File upload failed:', uploadError)
-        alert('File upload failed')
+        const msg =
+          uploadError.message === 'Bucket not found'
+            ? 'Print file bucket missing. Please create a "print-files" bucket in Supabase.'
+            : 'File upload failed'
+        alert(msg)
         setUploading(false)
       } else {
         const { data: signed, error: signError } = await supabase.storage
