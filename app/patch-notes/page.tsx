@@ -57,7 +57,11 @@ export default function PatchNotesPage() {
           <div className="text-sm text-gray-500 dark:text-gray-400 mb-3">
             {new Date(note.created_at).toLocaleString()}
           </div>
-          <p>{note.description}</p>
+          <ul className="list-disc pl-6">
+            {note.description.split('\n').map((line, idx) => (
+              <li key={idx}>{line.replace(/^\-\s*/, '')}</li>
+            ))}
+          </ul>
         </div>
       ))}
     </main>
