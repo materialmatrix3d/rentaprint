@@ -1,13 +1,19 @@
 import Link from 'next/link'
 import { listAppRoutes } from '@/lib/listRoutes'
 
+function bytesToGB(bytes: number) {
+  return bytes / (1024 ** 3)
+}
+
+function msToHours(ms: number) {
+  return ms / 1000 / 60 / 60
+}
+
 type NetlifyUsage = {
-  capabilities: {
-    functions?: { used: number }
-    functions_gb_hour?: { used: number }
-    bandwidth?: { used: number }
-    build_minutes?: { used: number }
-  }
+  functions_invocations_count: number
+  functions_execution_time_ms: number
+  bandwidth_used: number
+  build_minutes_used: number
 }
 
 type NetlifySite = {
@@ -16,15 +22,16 @@ type NetlifySite = {
 }
 
 async function fetchNetlifyUsage() {
-  const accountId = process.env.NETLIFY_ACCOUNT_ID
   const token = process.env.NETLIFY_TOKEN
-  if (!accountId || !token) return null
+  if (!token) return null
   try {
-    const res = await fetch(`https://api.netlify.com/api/v1/accounts/${accountId}`,
+    const res = await fetch(
+      'https://api.netlify.com/api/v1/accounts/bc8df2c4-2079-4bd4-9a0c-8fe07b5c62aa/usage',
       {
         headers: { Authorization: `Bearer ${token}` },
         cache: 'no-store',
-      })
+      }
+    )
     if (!res.ok) return null
     return (await res.json()) as NetlifyUsage
   } catch {
@@ -54,10 +61,10 @@ export default async function AdminSystemPage() {
   const site = await fetchNetlifySite()
   const routes = await listAppRoutes()
 
-  const functionInvocations = usage?.capabilities?.functions?.used ?? 0
-  const functionRuntime = usage?.capabilities?.functions_gb_hour?.used ?? 0
-  const bandwidth = usage?.capabilities?.bandwidth?.used ?? 0
-  const buildMinutes = usage?.capabilities?.build_minutes?.used ?? 0
+  const functionInvocations = usage?.functions_invocations_count ?? 0
+  const functionRuntimeHours = msToHours(usage?.functions_execution_time_ms ?? 0)
+  const bandwidthGB = bytesToGB(usage?.bandwidth_used ?? 0)
+  const buildMinutes = usage?.build_minutes_used ?? 0
 
   return (
     <div className="space-y-8">
@@ -74,15 +81,15 @@ export default async function AdminSystemPage() {
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
             <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded">
               <h2 className="font-semibold">Function Invocations</h2>
-              <p>{functionInvocations}</p>
+              <p>{functionInvocations.toLocaleString()}</p>
             </div>
             <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded">
-              <h2 className="font-semibold">Function GB-Hours</h2>
-              <p>{functionRuntime}</p>
+              <h2 className="font-semibold">Function Runtime</h2>
+              <p>{functionRuntimeHours.toFixed(2)} hrs</p>
             </div>
             <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded">
               <h2 className="font-semibold">Bandwidth Used</h2>
-              <p>{bandwidth}</p>
+              <p>{bandwidthGB.toFixed(2)} GB</p>
             </div>
             <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded">
               <h2 className="font-semibold">Build Minutes</h2>
