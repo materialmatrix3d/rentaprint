@@ -13,6 +13,8 @@ export default function NewPrinterPage() {
     materials: '',
     build_volume: '',
     price_per_hour: '',
+    cost_per_gram: '',
+    tags: '',
     description: '',
   });
   const [status, setStatus] = useState('');
@@ -50,6 +52,11 @@ export default function NewPrinterPage() {
       materials: formData.materials.split(',').map(m => m.trim()),
       build_volume: formData.build_volume,
       price_per_hour: parseFloat(formData.price_per_hour),
+      cost_per_gram: parseFloat(formData.cost_per_gram) || 0,
+      tags: formData.tags
+        .split(',')
+        .map(t => t.trim())
+        .filter(Boolean),
       description: formData.description || null,
       is_available: true,
     }]);
@@ -64,6 +71,8 @@ export default function NewPrinterPage() {
         materials: '',
         build_volume: '',
         price_per_hour: '',
+        cost_per_gram: '',
+        tags: '',
         description: '',
       });
     }
@@ -80,6 +89,8 @@ export default function NewPrinterPage() {
         <input name="materials" value={formData.materials} onChange={handleChange} placeholder="PLA, PETG, ABS..." required className={inputClass} />
         <input name="build_volume" value={formData.build_volume} onChange={handleChange} placeholder="220x220x250mm" required className={inputClass} />
         <input name="price_per_hour" type="number" value={formData.price_per_hour} onChange={handleChange} placeholder="Price per hour (e.g. 5.00)" required className={inputClass} />
+        <input name="cost_per_gram" type="number" value={formData.cost_per_gram} onChange={handleChange} placeholder="Cost per gram (e.g. 0.05)" required className={inputClass} />
+        <input name="tags" value={formData.tags} onChange={handleChange} placeholder="Tags (comma separated)" className={inputClass} />
         <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Printer details (optional)" className={inputClass} />
         <button type="submit" className="bg-blue-600 text-gray-900 dark:text-white px-4 py-2 rounded">Submit</button>
         <p className="text-sm text-gray-600">{status}</p>
