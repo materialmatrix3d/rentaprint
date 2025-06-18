@@ -2,7 +2,7 @@
   {
     "title": "Material Cost Integration",
     "description": "Allow users to estimate material usage per booking and charge based on owner-defined cost per gram.",
-    "status": "planned",
+    "status": "done",
     "priority": "medium",
     "tags": [
       "pricing",
@@ -32,7 +32,7 @@
   {
     "title": "Printer Tags & Filtering",
     "description": "Let owners add tags to their printers (e.g. PLA, high-speed, multi-color) and allow users to filter results by tag.",
-    "status": "planned",
+    "status": "done",
     "priority": "medium",
     "tags": [
       "search",
@@ -53,7 +53,7 @@
   {
     "title": "Multi-Material Support Tags",
     "description": "Allow owners to tag printers with special capabilities like dual extrusion, resin printing, or multicolor support. Renters can filter by these tags.",
-    "status": "planned",
+    "status": "done",
     "priority": "medium",
     "tags": [
       "printer-features",
@@ -97,7 +97,7 @@
   {
     "title": "Printer Comparison Tool",
     "description": "Allow renters to compare multiple printer listings by price, rating, materials, and print volume in a side-by-side view.",
-    "status": "planned",
+    "status": "done",
     "priority": "low",
     "tags": [
       "search",
@@ -119,7 +119,7 @@
   {
     "title": "Mobile Version of the Website",
     "description": "Build a responsive mobile-friendly version of the RentAPrint platform. Prioritize accessibility and usability on screens smaller than 640px using Tailwind CSS utilities. Key pages like homepage, listings, bookings, profile, and owner panel should adapt smoothly to mobile devices.",
-    "status": "planned",
+    "status": "done",
     "priority": "high",
     "tags": [
       "mobile",
@@ -128,4 +128,3 @@
     ]
   }
 ]
-
