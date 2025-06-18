@@ -17,7 +17,7 @@ type NetlifySite = {
 
 async function fetchNetlifyUsage() {
   const accountId = process.env.NETLIFY_ACCOUNT_ID
-  const token = process.env.NETLIFY_AUTH_TOKEN
+  const token = process.env.NETLIFY_TOKEN
   if (!accountId || !token) return null
   try {
     const res = await fetch(`https://api.netlify.com/api/v1/accounts/${accountId}`,
@@ -34,7 +34,7 @@ async function fetchNetlifyUsage() {
 
 async function fetchNetlifySite() {
   const siteId = process.env.NETLIFY_SITE_ID
-  const token = process.env.NETLIFY_AUTH_TOKEN
+  const token = process.env.NETLIFY_TOKEN
   if (!siteId || !token) return null
   try {
     const res = await fetch(`https://api.netlify.com/api/v1/sites/${siteId}`,
@@ -54,10 +54,10 @@ export default async function AdminSystemPage() {
   const site = await fetchNetlifySite()
   const routes = await listAppRoutes()
 
-  const functionInvocations = usage?.capabilities?.functions?.used ?? 'N/A'
-  const functionRuntime = usage?.capabilities?.functions_gb_hour?.used ?? 'N/A'
-  const bandwidth = usage?.capabilities?.bandwidth?.used ?? 'N/A'
-  const buildMinutes = usage?.capabilities?.build_minutes?.used ?? 'N/A'
+  const functionInvocations = usage?.capabilities?.functions?.used ?? 0
+  const functionRuntime = usage?.capabilities?.functions_gb_hour?.used ?? 0
+  const bandwidth = usage?.capabilities?.bandwidth?.used ?? 0
+  const buildMinutes = usage?.capabilities?.build_minutes?.used ?? 0
 
   return (
     <div className="space-y-8">
@@ -90,7 +90,7 @@ export default async function AdminSystemPage() {
             </div>
           </div>
         ) : (
-          <p className="text-red-500">Netlify credentials not configured.</p>
+          <p className="text-red-500">Netlify usage unavailable.</p>
         )}
       </section>
 
@@ -110,6 +110,7 @@ export default async function AdminSystemPage() {
       <section>
         <h2 className="text-xl font-bold mb-2">Environment</h2>
         <p>Node {process.version}</p>
+        <p>NPM {process.versions.npm}</p>
       </section>
     </div>
   )
