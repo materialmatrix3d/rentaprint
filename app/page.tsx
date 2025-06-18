@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Printer, User, UploadCloud, Search, Star } from "lucide-react";
-import { IconCube3dSphere } from "@tabler/icons-react";
+import { IconPrinter } from "@tabler/icons-react";
 
 
 
@@ -26,7 +26,7 @@ export default function Home() {
           />
         </div>
         <div className="grid md:grid-cols-2 gap-y-8 gap-x-8 md:gap-x-12 items-center">
-          <div className="space-y-6 text-center md:text-left px-4 md:px-12">
+          <div className="space-y-6 text-center md:text-left pl-6 pr-4 md:px-12">
             <h1 className="text-4xl md:text-5xl font-bold">
               Rent 3D Printers Near You — Fast, Flexible, On-Demand.
             </h1>
@@ -50,14 +50,14 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <div className="flex justify-center md:justify-end">
+          <div className="flex justify-center md:justify-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.8 }}
-              className="w-64 h-64 md:w-80 md:h-80 flex items-center justify-center rounded-2xl shadow-xl"
+              className="w-64 h-64 md:w-80 md:h-80 flex items-center justify-center rounded-2xl shadow-xl mx-auto mt-8 md:mt-0"
             >
-              <IconCube3dSphere className="w-28 h-28 md:w-40 md:h-40 text-blue-400" />
+              <IconPrinter className="w-28 h-28 md:w-40 md:h-40 text-blue-400" />
             </motion.div>
           </div>
         </div>
