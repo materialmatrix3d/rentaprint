@@ -24,6 +24,8 @@ features or improvements.
 2. Commit your changes with clear messages.
 3. Open a pull request against `main` describing your changes.
 4. Ensure all tests pass.
+5. Merging to `main` deploys immediately to production, so review your changes
+   carefully. See the README's **Deployment Workflow** section for details.
 
 ### Sample Codex Prompt
 

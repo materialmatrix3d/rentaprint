@@ -45,6 +45,12 @@ We welcome pull requests and issue reports! See
 Codex users are encouraged to submit prompt ideas alongside code patches and
 documentation improvements.
 
+## Deployment Workflow
+
+Merging into the `main` branch automatically deploys the latest code to
+[rentaprint.net](https://rentaprint.net) through GitHub Actions. Review and test
+changes thoroughly before merging to avoid impacting the live site.
+
 ## License
 
 This project is released under the Business Source License 1.1. See
