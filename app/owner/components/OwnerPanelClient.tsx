@@ -407,7 +407,7 @@ export default function OwnerPanel() {
             const printerBookings = bookings.filter(b => b.printer_id === printer.id)
             return (
               <li key={printer.id} className="p-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded space-y-2">
-                <div className="flex justify-between items-start">
+                <div className="flex flex-col sm:flex-row sm:justify-between items-start gap-2">
                   <div>
                     <p className="font-medium text-gray-900 dark:text-white">{printer.name}</p>
                     <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
@@ -434,7 +434,7 @@ export default function OwnerPanel() {
                       const hours = Math.round((end.getTime() - start.getTime()) / 3600000)
                       return (
                         <li key={booking.id} className="p-3 border rounded bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white space-y-1">
-                          <div className="flex justify-between items-center">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                             <p className="font-medium">{Array.isArray(booking.printers) ? booking.printers[0]?.name : booking.printers.name}</p>
                             <span className={`text-xs font-semibold px-2 py-1 rounded ${
                                 bookingStatusClasses[booking.status]
@@ -509,7 +509,7 @@ export default function OwnerPanel() {
     <>
       <SignedIn>
         <main className="space-y-8 p-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <h1 className="text-2xl font-bold">Owner Panel</h1>
             <Link
               href="/printers/new"

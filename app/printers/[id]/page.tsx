@@ -55,7 +55,7 @@ export default function PrinterDetailPage() {
 
   return (
     <div className="p-6 text-gray-900 dark:text-white max-w-xl space-y-2">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
         <h1 className="text-2xl font-bold">
           {printer.name}{' '}
           {printer.is_deleted && (

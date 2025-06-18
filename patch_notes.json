@@ -97,4 +97,11 @@
     "description": "- Updated landing page with new hero section and CTAs.\n- Added renter/owner guides and modern stepper.",
     "created_at": "2025-06-27T00:00:00.000Z"
   }
+  ,
+  {
+    "id": "90ffb974-fec0-45ef-bb84-ade8bcff166b",
+    "title": "Mobile Responsive Design",
+    "description": "- Optimized navigation and key pages for screens under 640px.\n- Added collapsible menu and responsive layouts.",
+    "created_at": "2025-06-28T00:00:00.000Z"
+  }
 ]
