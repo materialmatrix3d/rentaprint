@@ -20,6 +20,7 @@ export default function BookingPage() {
   const [infill, setInfill] = useState('')
   const [supports, setSupports] = useState('')
   const [notes, setNotes] = useState('')
+  const [materialGrams, setMaterialGrams] = useState('')
 
   useEffect(() => {
     const fetchPrinter = async () => {
@@ -92,6 +93,7 @@ export default function BookingPage() {
         start_date: start.toISOString(),
         end_date: end.toISOString(),
         estimated_runtime_hours: runtime,
+        estimated_material_grams: materialGrams ? parseFloat(materialGrams) : null,
         layer_height: layerHeight || null,
         infill: infill || null,
         supports: supports ? supports === 'yes' : null,
@@ -191,8 +193,21 @@ export default function BookingPage() {
           } hours.`}
         </p>
         <p className="text-sm">
-          {`Estimated Cost: $${(runtime * (printer.price_per_hour || 0)).toFixed(2)}`}
+          {`Estimated Cost: $${(
+            runtime * (printer.price_per_hour || 0) +
+            (parseFloat(materialGrams) || 0) * (printer.cost_per_gram || 0)
+          ).toFixed(2)}`}
         </p>
+        <label className="block text-sm">
+          Estimated Material (g):
+          <input
+            type="number"
+            min="0"
+            value={materialGrams}
+            onChange={e => setMaterialGrams(e.target.value)}
+            className="mt-1 w-full p-2 border rounded text-black dark:text-white dark:bg-neutral-800"
+          />
+        </label>
         <label className="block text-sm">
           Optional Print File:
           <input
