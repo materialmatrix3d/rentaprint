@@ -9,7 +9,9 @@ export interface Printer {
   materials: string[]
   build_volume: string
   price_per_hour: number
+  cost_per_gram: number
   description: string | null
+  tags?: string[]
   status?: string
   is_available?: boolean
   is_deleted?: boolean

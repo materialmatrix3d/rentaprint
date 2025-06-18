@@ -22,6 +22,7 @@ alter table bookings add column if not exists layer_height text;
 alter table bookings add column if not exists infill text;
 alter table bookings add column if not exists supports boolean;
 alter table bookings add column if not exists print_notes text;
+alter table bookings add column if not exists estimated_material_grams numeric;
 
 -- Printers table update
 alter table printers add column if not exists is_available boolean default true;
@@ -29,6 +30,8 @@ alter table printers add column if not exists is_deleted boolean default false;
 alter table printers add column if not exists is_under_maintenance boolean default false;
 alter table printers add column if not exists min_runtime_hours numeric default 1;
 alter table printers add column if not exists max_runtime_hours numeric default 24;
+alter table printers add column if not exists cost_per_gram numeric default 0;
+alter table printers add column if not exists tags text[];
 
 -- Patch Notes Table
 create table if not exists patch_notes (
