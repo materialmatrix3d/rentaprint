@@ -135,7 +135,7 @@ export default function ProfilePage() {
                   const hours = Math.round((new Date(b.end_date).getTime() - start.getTime()) / 3600000)
                   return (
                     <li key={b.id} className="p-4 bg-gray-100 dark:bg-gray-700 rounded text-gray-900 dark:text-white space-y-1">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                     <p className="font-medium">
                       {Array.isArray(b.printers)
                         ? b.printers[0]?.name

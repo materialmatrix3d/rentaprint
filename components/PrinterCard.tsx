@@ -15,8 +15,8 @@ export default function PrinterCard({ printer, onEdit, onDelete }: Props) {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-700 p-4 space-y-2 w-fit max-w-full">
-      <div className="flex justify-between items-center">
+    <div className="bg-white dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-700 p-4 space-y-2 w-full sm:w-fit">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
         <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
           {printer.make_model}
         </h3>
