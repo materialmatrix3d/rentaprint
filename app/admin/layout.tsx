@@ -2,15 +2,13 @@ import { auth, currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
+const ADMIN_IDS = ['user_2yOOenOqgctifQSGp9mkcogBJTy']
+
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const { userId } = await auth()
   if (!userId) redirect('/')
   const user = await currentUser()
-  const isAdmin =
-    user?.publicMetadata?.role === 'admin' ||
-    (Array.isArray(user?.publicMetadata?.roles) && user!.publicMetadata!.roles.includes('admin')) ||
-    user?.privateMetadata?.role === 'admin' ||
-    (Array.isArray(user?.privateMetadata?.roles) && user!.privateMetadata!.roles.includes('admin'))
+  const isAdmin = user && ADMIN_IDS.includes(user.id)
   if (!isAdmin) redirect('/')
 
   return (
