@@ -7,16 +7,17 @@ RentAPrint is an open-source platform for listing and booking 3D printers. It
 lets owners share their machines while makers reserve print time. The official
 service is available at [rentaprint.net](https://rentaprint.net).
 
-## Local Development
+## Getting Started
 
 1. Install dependencies:
    ```bash
    npm install
    ```
-2. Copy the example environment file:
+2. Copy the example environment file and add your own keys:
    ```bash
    cp .env.example .env.local
    ```
+   Fill `.env.local` with your Supabase and Clerk credentials. Both services offer free tiers and no production keys are shared.
 3. Create **or update** the database tables by running the SQL in `types/schema.sql`
    against your Supabase project. Whenever you pull new code, re-run this file to
    apply any schema changes (for example new columns like `estimated_runtime_hours`).
@@ -53,5 +54,7 @@ changes thoroughly before merging to avoid impacting the live site.
 
 ## License
 
-This project is released under the Business Source License 1.1. See
-[LICENSE](LICENSE) for details.
+This project is licensed under the Business Source License 1.1 (BSL). You may
+use and host this code for non-commercial use only. After two years, each
+release becomes available under the MIT license. See
+[LICENSE](LICENSE) for full details.
