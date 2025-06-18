@@ -1,18 +1,10 @@
 'use client'
-import { Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs'
 import type { Printer } from '@/lib/data'
 
-export default function Page() {
-  return (
-    <Suspense>
-      <ComparePrintersPage />
-    </Suspense>
-  )
-}
-
-function ComparePrintersPage() {
+export default function ComparePrintersPage() {
   const params = useSearchParams()
   const ids = params.get('ids')?.split(',') ?? []
   const [printers, setPrinters] = useState<Printer[]>([])
