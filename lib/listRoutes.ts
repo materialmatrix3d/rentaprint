@@ -23,7 +23,14 @@ async function traverse(dir: string, base: string, routes: Set<string>) {
 }
 
 export async function listAppRoutes() {
-  const baseDir = path.join(process.cwd(), 'app')
+  let baseDir = path.join(process.cwd(), 'app')
+  try {
+    const stat = await fs.stat(baseDir)
+    if (!stat.isDirectory()) throw new Error('not dir')
+  } catch {
+    const builtDir = path.join(process.cwd(), '.next/server/app')
+    baseDir = builtDir
+  }
   const routes = new Set<string>()
   await traverse(baseDir, baseDir, routes)
   return Array.from(routes).sort()

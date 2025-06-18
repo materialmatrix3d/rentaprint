@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { listAppRoutes } from '@/lib/listRoutes'
 
+export const dynamic = 'force-dynamic'
+
 function bytesToGB(bytes: number) {
   return bytes / (1024 ** 3)
 }
@@ -77,28 +79,24 @@ export default async function AdminSystemPage() {
             </a>
           </p>
         )}
-        {usage ? (
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-            <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded">
-              <h2 className="font-semibold">Function Invocations</h2>
-              <p>{functionInvocations.toLocaleString()}</p>
-            </div>
-            <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded">
-              <h2 className="font-semibold">Function Runtime</h2>
-              <p>{functionRuntimeHours.toFixed(2)} hrs</p>
-            </div>
-            <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded">
-              <h2 className="font-semibold">Bandwidth Used</h2>
-              <p>{bandwidthGB.toFixed(2)} GB</p>
-            </div>
-            <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded">
-              <h2 className="font-semibold">Build Minutes</h2>
-              <p>{buildMinutes}</p>
-            </div>
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded">
+            <h2 className="font-semibold">Function Invocations</h2>
+            <p>{functionInvocations.toLocaleString()}</p>
           </div>
-        ) : (
-          <p className="text-red-500">Netlify usage unavailable.</p>
-        )}
+          <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded">
+            <h2 className="font-semibold">Function Runtime</h2>
+            <p>{functionRuntimeHours.toFixed(2)} hrs</p>
+          </div>
+          <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded">
+            <h2 className="font-semibold">Bandwidth Used</h2>
+            <p>{bandwidthGB.toFixed(2)} GB</p>
+          </div>
+          <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded">
+            <h2 className="font-semibold">Build Minutes</h2>
+            <p>{buildMinutes}</p>
+          </div>
+        </div>
       </section>
 
       <section>
