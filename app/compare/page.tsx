@@ -1,2 +1,5 @@
-export { metadata } from '../printers/compare/page'
-export { default } from '../printers/compare/page'
+import ComparePage from '../printers/compare/page'
+
+export const metadata = { title: 'Compare Printers - RentAPrint' }
+
+export default ComparePage
