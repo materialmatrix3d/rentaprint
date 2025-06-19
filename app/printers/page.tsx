@@ -10,6 +10,7 @@ export default function PrintersPage() {
   const [printers, setPrinters] = useState<Printer[]>([]);
   const [rented, setRented] = useState<Record<string, boolean>>({});
   const [filter, setFilter] = useState('All');
+  const [search, setSearch] = useState('');
   const [compare, setCompare] = useState<Record<string, boolean>>({});
   const [tags, setTags] = useState<string[]>([]);
 
@@ -49,11 +50,22 @@ export default function PrintersPage() {
     fetchPrinters();
   }, []);
 
-  const filtered = printers.filter(p => filter === 'All' || p.tags?.includes(filter))
+  const filtered = printers.filter(
+    p =>
+      (filter === 'All' || p.tags?.includes(filter)) &&
+      p.name.toLowerCase().includes(search.toLowerCase())
+  )
 
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Available Printers</h2>
+      <input
+        type="text"
+        value={search}
+        onChange={e => setSearch(e.target.value)}
+        placeholder="Search by name"
+        className="mb-4 w-full max-w-xs p-2 border rounded text-black dark:text-white dark:bg-neutral-800"
+      />
       {tags.length > 1 && (
         <FilterButtons filters={tags} currentFilter={filter} setFilter={setFilter} />
       )}

@@ -21,6 +21,7 @@ export default function BookingPage() {
   const [supports, setSupports] = useState('')
   const [notes, setNotes] = useState('')
   const [materialGrams, setMaterialGrams] = useState('')
+  const [tip, setTip] = useState('')
 
   useEffect(() => {
     const fetchPrinter = async () => {
@@ -98,6 +99,7 @@ export default function BookingPage() {
         infill: infill || null,
         supports: supports ? supports === 'yes' : null,
         print_notes: notes || null,
+        tip_amount: tip ? parseFloat(tip) : null,
       })
       .select()
       .single()
@@ -148,6 +150,11 @@ export default function BookingPage() {
 
   return (
     <div className="p-4">
+      <nav className="text-sm mb-2">
+        <Link href="/" className="underline">Home</Link> &gt;{' '}
+        <Link href="/printers" className="underline">Printers</Link> &gt;{' '}
+        <span>Book</span>
+      </nav>
       <h1 className="text-2xl font-bold mb-2">Booking: {printer.name}</h1>
       <p>
         <strong>Location:</strong> {printer.location || 'Unknown'}
@@ -169,6 +176,17 @@ export default function BookingPage() {
       <p>
         <strong>Availability:</strong> {printer.availability || 'Not specified'}
       </p>
+      {printer.tipping_enabled && (
+        <label className="block text-sm">
+          Tip for Owner ($):
+          <input
+            type="number"
+            value={tip}
+            onChange={e => setTip(e.target.value)}
+            className="mt-1 w-full p-2 border rounded text-black dark:text-white dark:bg-neutral-800"
+          />
+        </label>
+      )}
       <p>
         <strong>Make/Model:</strong> {printer.make_model || 'N/A'}
       </p>

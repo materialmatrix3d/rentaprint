@@ -18,4 +18,6 @@ export interface Printer {
   is_under_maintenance?: boolean
   min_runtime_hours?: number
   max_runtime_hours?: number
+  is_verified?: boolean
+  tipping_enabled?: boolean
 }
