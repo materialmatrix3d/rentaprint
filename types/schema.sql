@@ -61,3 +61,96 @@ create table if not exists booking_change_requests (
   status text default 'pending',
   created_at timestamp with time zone default now()
 );
+
+-- Enable row level security
+alter table bookings enable row level security;
+alter table printers enable row level security;
+alter table reviews enable row level security;
+alter table booking_change_requests enable row level security;
+alter table patch_notes enable row level security;
+
+-- Printers RLS Policies
+create policy "Public select printers" on printers
+  for select using (true);
+
+create policy "Insert own printer" on printers
+  for insert with check (auth.uid() = clerk_user_id);
+
+create policy "Update own printer" on printers
+  for update using (auth.uid() = clerk_user_id) with check (auth.uid() = clerk_user_id);
+
+create policy "Delete own printer" on printers
+  for delete using (auth.uid() = clerk_user_id);
+
+-- Bookings RLS Policies
+create policy "Select bookings for owners" on bookings
+  for select using (
+    auth.uid() = clerk_user_id or
+    exists (select 1 from printers p where p.id = printer_id and p.clerk_user_id = auth.uid())
+  );
+
+create policy "Insert own booking" on bookings
+  for insert with check (auth.uid() = clerk_user_id);
+
+create policy "Update own or printer booking" on bookings
+  for update using (
+    auth.uid() = clerk_user_id or
+    exists (select 1 from printers p where p.id = printer_id and p.clerk_user_id = auth.uid())
+  ) with check (
+    auth.uid() = clerk_user_id or
+    exists (select 1 from printers p where p.id = printer_id and p.clerk_user_id = auth.uid())
+  );
+
+create policy "Delete own or printer booking" on bookings
+  for delete using (
+    auth.uid() = clerk_user_id or
+    exists (select 1 from printers p where p.id = printer_id and p.clerk_user_id = auth.uid())
+  );
+
+-- Reviews RLS Policies
+create policy "Public select reviews" on reviews
+  for select using (true);
+
+create policy "Insert own review" on reviews
+  for insert with check (auth.uid() = clerk_user_id);
+
+create policy "Update own review" on reviews
+  for update using (auth.uid() = clerk_user_id) with check (auth.uid() = clerk_user_id);
+
+create policy "Delete own review" on reviews
+  for delete using (auth.uid() = clerk_user_id);
+
+-- Booking Change Requests RLS Policies
+create policy "Select change requests" on booking_change_requests
+  for select using (
+    exists (select 1 from bookings b where b.id = booking_id and b.clerk_user_id = auth.uid()) or
+    exists (
+      select 1 from bookings b join printers p on p.id = b.printer_id
+      where b.id = booking_id and p.clerk_user_id = auth.uid()
+    )
+  );
+
+create policy "Insert change request" on booking_change_requests
+  for insert with check (
+    exists (select 1 from bookings b where b.id = booking_id and b.clerk_user_id = auth.uid())
+  );
+
+create policy "Update request status" on booking_change_requests
+  for update using (
+    exists (
+      select 1 from bookings b join printers p on p.id = b.printer_id
+      where b.id = booking_id and p.clerk_user_id = auth.uid()
+    )
+  ) with check (
+    exists (
+      select 1 from bookings b join printers p on p.id = b.printer_id
+      where b.id = booking_id and p.clerk_user_id = auth.uid()
+    )
+  );
+
+-- Patch Notes RLS Policies
+create policy "Public select patch notes" on patch_notes
+  for select using (true);
+
+create policy "Authenticated insert patch note" on patch_notes
+  for insert with check (auth.uid() is not null);
