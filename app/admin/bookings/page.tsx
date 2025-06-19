@@ -1,7 +1,18 @@
 import { fetchAllBookings } from '@/lib/admin'
+import type { BookingStatus } from '@/lib/bookings'
+
+interface Booking {
+  id: string
+  printer_id: string
+  clerk_user_id: string
+  status: BookingStatus
+  start_date: string
+  end_date: string
+  printers: { name: string } | { name: string }[]
+}
 
 export default async function AdminBookingsPage() {
-  const bookings = await fetchAllBookings()
+  const bookings = (await fetchAllBookings()) as Booking[]
 
   return (
     <div className="space-y-4">
