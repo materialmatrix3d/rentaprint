@@ -6,7 +6,9 @@ import { SignedIn, SignedOut, RedirectToSignIn, useUser } from '@clerk/nextjs'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import type { Printer } from '@/lib/data'
 import { bookingStatusClasses, type BookingStatus } from '@/lib/bookings'
+import dynamic from 'next/dynamic'
 
+const STLViewer = dynamic(() => import('@/components/STLViewer'), { ssr: false })
 interface Booking {
   id: string
   printer_id: string
@@ -283,6 +285,11 @@ export default function OwnerPanel() {
                 <a href={b.print_file_url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 dark:text-blue-400 underline">
                   Download STL
                 </a>
+              )}
+              {b.print_file_url?.toLowerCase().endsWith('.stl') && (
+                <div className="mt-2 h-72">
+                  <STLViewer url={b.print_file_url} />
+                </div>
               )}
               <p className="text-sm">Layer Height: {b.layer_height || 'N/A'}</p>
               <p className="text-sm">Infill: {b.infill || 'N/A'}</p>

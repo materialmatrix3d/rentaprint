@@ -23,6 +23,7 @@ alter table bookings add column if not exists infill text;
 alter table bookings add column if not exists supports boolean;
 alter table bookings add column if not exists print_notes text;
 alter table bookings add column if not exists estimated_material_grams numeric;
+alter table bookings add column if not exists tip_amount numeric;
 
 -- Printers table update
 alter table printers add column if not exists is_available boolean default true;
@@ -68,12 +69,22 @@ create table if not exists booking_change_requests (
   created_at timestamp with time zone default now()
 );
 
+-- Booking Messages Table
+create table if not exists booking_messages (
+  id uuid primary key default gen_random_uuid(),
+  booking_id uuid references bookings(id),
+  sender_id uuid,
+  message text,
+  timestamp timestamp with time zone default now()
+);
+
 -- Enable row level security
 alter table bookings enable row level security;
 alter table printers enable row level security;
 alter table reviews enable row level security;
 alter table booking_change_requests enable row level security;
 alter table patch_notes enable row level security;
+alter table booking_messages enable row level security;
 
 -- Printers RLS Policies
 create policy "Public select printers" on printers
@@ -160,3 +171,24 @@ create policy "Public select patch notes" on patch_notes
 
 create policy "Authenticated insert patch note" on patch_notes
   for insert with check (auth.uid() is not null);
+
+-- Booking Messages RLS Policies
+create policy "Select booking messages" on booking_messages
+  for select using (
+    exists (
+      select 1 from bookings b join printers p on p.id = b.printer_id
+      where b.id = booking_id and (
+        b.clerk_user_id = auth.uid() or p.clerk_user_id = auth.uid()
+      )
+    )
+  );
+
+create policy "Insert booking message" on booking_messages
+  for insert with check (
+    exists (
+      select 1 from bookings b join printers p on p.id = b.printer_id
+      where b.id = booking_id and (
+        b.clerk_user_id = auth.uid() or p.clerk_user_id = auth.uid()
+      )
+    )
+  );
