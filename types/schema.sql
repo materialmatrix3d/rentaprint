@@ -1,57 +1,4 @@
-
--- Bookings Table
-create table if not exists bookings (
-  id uuid primary key default gen_random_uuid(),
-  printer_id uuid references printers(id),
-  clerk_user_id uuid,
-  start_date timestamp with time zone,
-  end_date timestamp with time zone,
-  estimated_runtime_hours numeric,
-  actual_runtime_hours numeric,
-  print_file_url text,
-  layer_height text,
-  infill text,
-  supports boolean,
-  print_notes text,
-  status text default 'pending',
-  created_at timestamp with time zone default now()
-);
-
-alter table bookings add column if not exists print_file_url text;
-alter table bookings add column if not exists layer_height text;
-alter table bookings add column if not exists infill text;
-alter table bookings add column if not exists supports boolean;
-alter table bookings add column if not exists print_notes text;
-alter table bookings add column if not exists estimated_material_grams numeric;
-alter table bookings add column if not exists tip_amount numeric;
-
--- Printers table update
-alter table printers add column if not exists is_available boolean default true;
-alter table printers add column if not exists is_deleted boolean default false;
-alter table printers add column if not exists is_under_maintenance boolean default false;
-alter table printers add column if not exists min_runtime_hours numeric default 1;
-alter table printers add column if not exists max_runtime_hours numeric default 24;
-alter table printers add column if not exists cost_per_gram numeric default 0;
-alter table printers add column if not exists tipping_enabled boolean default false;
-alter table printers add column if not exists is_verified boolean default false;
-alter table printers add column if not exists tags text[];
-alter table printers add column if not exists created_at timestamp with time zone default now();
--- Drop policies referencing clerk_user_id before altering type
-drop policy if exists "Insert own printer" on printers;
-drop policy if exists "Update own printer" on printers;
-drop policy if exists "Delete own printer" on printers;
-drop policy if exists "Select bookings for owners" on bookings;
-drop policy if exists "Insert own booking" on bookings;
-drop policy if exists "Update own or printer booking" on bookings;
-drop policy if exists "Delete own or printer booking" on bookings;
-drop policy if exists "Insert own review" on reviews;
-drop policy if exists "Update own review" on reviews;
-drop policy if exists "Delete own review" on reviews;
-alter table printers alter column clerk_user_id type uuid using clerk_user_id::uuid;
-alter table bookings alter column clerk_user_id type uuid using clerk_user_id::uuid;
-alter table reviews alter column clerk_user_id type uuid using clerk_user_id::uuid;
-
--- Patch Notes Table
+-- Create All Tables First
 create table if not exists patch_notes (
   id uuid primary key default gen_random_uuid(),
   title text not null,
@@ -59,7 +6,6 @@ create table if not exists patch_notes (
   created_at timestamp with time zone default now()
 );
 
--- Reviews Table
 create table if not exists reviews (
   id uuid primary key default gen_random_uuid(),
   clerk_user_id uuid,
@@ -69,7 +15,6 @@ create table if not exists reviews (
   created_at timestamp with time zone default now()
 );
 
--- Booking Change Requests Table
 create table if not exists booking_change_requests (
   id uuid primary key default gen_random_uuid(),
   booking_id uuid references bookings(id),
@@ -80,7 +25,6 @@ create table if not exists booking_change_requests (
   created_at timestamp with time zone default now()
 );
 
--- Booking Messages Table
 create table if not exists booking_messages (
   id uuid primary key default gen_random_uuid(),
   booking_id uuid references bookings(id),
@@ -89,117 +33,24 @@ create table if not exists booking_messages (
   timestamp timestamp with time zone default now()
 );
 
--- Enable row level security
-alter table bookings enable row level security;
-alter table printers enable row level security;
-alter table reviews enable row level security;
-alter table booking_change_requests enable row level security;
-alter table patch_notes enable row level security;
-alter table booking_messages enable row level security;
+-- Now safely drop all policies referencing clerk_user_id
+drop policy if exists "Insert own printer" on printers;
+drop policy if exists "Update own printer" on printers;
+drop policy if exists "Delete own printer" on printers;
+drop policy if exists "Select bookings for owners" on bookings;
+drop policy if exists "Insert own booking" on bookings;
+drop policy if exists "Update own or printer booking" on bookings;
+drop policy if exists "Delete own or printer booking" on bookings;
+drop policy if exists "Insert own review" on reviews;
+drop policy if exists "Update own review" on reviews;
+drop policy if exists "Delete own review" on reviews;
+drop policy if exists "Select change requests" on booking_change_requests;
+drop policy if exists "Insert change request" on booking_change_requests;
+drop policy if exists "Update request status" on booking_change_requests;
+drop policy if exists "Select booking messages" on booking_messages;
+drop policy if exists "Insert booking message" on booking_messages;
 
--- Printers RLS Policies
-create policy "Public select printers" on printers
-  for select using (true);
-
-create policy "Insert own printer" on printers
-  for insert with check (auth.uid() = clerk_user_id);
-
-create policy "Update own printer" on printers
-  for update using (auth.uid() = clerk_user_id) with check (auth.uid() = clerk_user_id);
-
-create policy "Delete own printer" on printers
-  for delete using (auth.uid() = clerk_user_id);
-
--- Bookings RLS Policies
-create policy "Select bookings for owners" on bookings
-  for select using (
-    auth.uid() = clerk_user_id or
-    exists (select 1 from printers p where p.id = printer_id and p.clerk_user_id = auth.uid())
-  );
-
-create policy "Insert own booking" on bookings
-  for insert with check (auth.uid() = clerk_user_id);
-
-create policy "Update own or printer booking" on bookings
-  for update using (
-    auth.uid() = clerk_user_id or
-    exists (select 1 from printers p where p.id = printer_id and p.clerk_user_id = auth.uid())
-  ) with check (
-    auth.uid() = clerk_user_id or
-    exists (select 1 from printers p where p.id = printer_id and p.clerk_user_id = auth.uid())
-  );
-
-create policy "Delete own or printer booking" on bookings
-  for delete using (
-    auth.uid() = clerk_user_id or
-    exists (select 1 from printers p where p.id = printer_id and p.clerk_user_id = auth.uid())
-  );
-
--- Reviews RLS Policies
-create policy "Public select reviews" on reviews
-  for select using (true);
-
-create policy "Insert own review" on reviews
-  for insert with check (auth.uid() = clerk_user_id);
-
-create policy "Update own review" on reviews
-  for update using (auth.uid() = clerk_user_id) with check (auth.uid() = clerk_user_id);
-
-create policy "Delete own review" on reviews
-  for delete using (auth.uid() = clerk_user_id);
-
--- Booking Change Requests RLS Policies
-create policy "Select change requests" on booking_change_requests
-  for select using (
-    exists (select 1 from bookings b where b.id = booking_id and b.clerk_user_id = auth.uid()) or
-    exists (
-      select 1 from bookings b join printers p on p.id = b.printer_id
-      where b.id = booking_id and p.clerk_user_id = auth.uid()
-    )
-  );
-
-create policy "Insert change request" on booking_change_requests
-  for insert with check (
-    exists (select 1 from bookings b where b.id = booking_id and b.clerk_user_id = auth.uid())
-  );
-
-create policy "Update request status" on booking_change_requests
-  for update using (
-    exists (
-      select 1 from bookings b join printers p on p.id = b.printer_id
-      where b.id = booking_id and p.clerk_user_id = auth.uid()
-    )
-  ) with check (
-    exists (
-      select 1 from bookings b join printers p on p.id = b.printer_id
-      where b.id = booking_id and p.clerk_user_id = auth.uid()
-    )
-  );
-
--- Patch Notes RLS Policies
-create policy "Public select patch notes" on patch_notes
-  for select using (true);
-
-create policy "Authenticated insert patch note" on patch_notes
-  for insert with check (auth.uid() is not null);
-
--- Booking Messages RLS Policies
-create policy "Select booking messages" on booking_messages
-  for select using (
-    exists (
-      select 1 from bookings b join printers p on p.id = b.printer_id
-      where b.id = booking_id and (
-        b.clerk_user_id = auth.uid() or p.clerk_user_id = auth.uid()
-      )
-    )
-  );
-
-create policy "Insert booking message" on booking_messages
-  for insert with check (
-    exists (
-      select 1 from bookings b join printers p on p.id = b.printer_id
-      where b.id = booking_id and (
-        b.clerk_user_id = auth.uid() or p.clerk_user_id = auth.uid()
-      )
-    )
-  );
+-- Then safely alter the column types
+alter table printers alter column clerk_user_id type uuid using clerk_user_id::uuid;
+alter table bookings alter column clerk_user_id type uuid using clerk_user_id::uuid;
+alter table reviews alter column clerk_user_id type uuid using clerk_user_id::uuid;
