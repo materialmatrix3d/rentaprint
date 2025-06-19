@@ -34,6 +34,10 @@ alter table printers add column if not exists cost_per_gram numeric default 0;
 alter table printers add column if not exists tipping_enabled boolean default false;
 alter table printers add column if not exists is_verified boolean default false;
 alter table printers add column if not exists tags text[];
+alter table printers add column if not exists created_at timestamp with time zone default now();
+alter table printers alter column clerk_user_id type uuid using clerk_user_id::uuid;
+alter table bookings alter column clerk_user_id type uuid using clerk_user_id::uuid;
+alter table reviews alter column clerk_user_id type uuid using clerk_user_id::uuid;
 
 -- Patch Notes Table
 create table if not exists patch_notes (
