@@ -36,6 +36,17 @@ alter table printers add column if not exists tipping_enabled boolean default fa
 alter table printers add column if not exists is_verified boolean default false;
 alter table printers add column if not exists tags text[];
 alter table printers add column if not exists created_at timestamp with time zone default now();
+-- Drop policies referencing clerk_user_id before altering type
+drop policy if exists "Insert own printer" on printers;
+drop policy if exists "Update own printer" on printers;
+drop policy if exists "Delete own printer" on printers;
+drop policy if exists "Select bookings for owners" on bookings;
+drop policy if exists "Insert own booking" on bookings;
+drop policy if exists "Update own or printer booking" on bookings;
+drop policy if exists "Delete own or printer booking" on bookings;
+drop policy if exists "Insert own review" on reviews;
+drop policy if exists "Update own review" on reviews;
+drop policy if exists "Delete own review" on reviews;
 alter table printers alter column clerk_user_id type uuid using clerk_user_id::uuid;
 alter table bookings alter column clerk_user_id type uuid using clerk_user_id::uuid;
 alter table reviews alter column clerk_user_id type uuid using clerk_user_id::uuid;
