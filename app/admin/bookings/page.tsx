@@ -1,7 +1,16 @@
 import { fetchAllBookings } from '@/lib/admin'
 
+type AdminBooking = {
+  id: string
+  printers: { name: string } | { name: string }[] | null
+  clerk_user_id: string
+  status: string
+  start_date: string
+  end_date: string
+}
+
 export default async function AdminBookingsPage() {
-  const bookings = await fetchAllBookings()
+  const bookings = (await fetchAllBookings()) as AdminBooking[]
 
   return (
     <div className="space-y-4">
@@ -21,16 +30,21 @@ export default async function AdminBookingsPage() {
             </tr>
           </thead>
           <tbody>
-            {bookings.map(b => (
-              <tr key={b.id} className="border-t">
-                <td className="p-2 text-xs">{b.id}</td>
-                <td className="p-2">{Array.isArray(b.printers) ? b.printers[0]?.name : b.printers?.name}</td>
-                <td className="p-2 text-xs">{b.clerk_user_id}</td>
-                <td className="p-2 text-xs">{b.status}</td>
-                <td className="p-2 text-xs">{new Date(b.start_date).toLocaleString()}</td>
-                <td className="p-2 text-xs">{new Date(b.end_date).toLocaleString()}</td>
-              </tr>
-            ))}
+            {bookings.map(b => {
+              const printerName = Array.isArray(b.printers)
+                ? b.printers[0]?.name
+                : b.printers?.name
+              return (
+                <tr key={b.id} className="border-t">
+                  <td className="p-2 text-xs">{b.id}</td>
+                  <td className="p-2">{printerName}</td>
+                  <td className="p-2 text-xs">{b.clerk_user_id}</td>
+                  <td className="p-2 text-xs">{b.status}</td>
+                  <td className="p-2 text-xs">{new Date(b.start_date).toLocaleString()}</td>
+                  <td className="p-2 text-xs">{new Date(b.end_date).toLocaleString()}</td>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       )}
