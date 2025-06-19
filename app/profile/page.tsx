@@ -98,6 +98,14 @@ export default function ProfilePage() {
             </div>
           </section>
 
+          {/* Referral Link */}
+          <section className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded shadow p-6 space-y-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Referral</h2>
+            {user && (
+              <p className="break-all">Share this link to invite friends: https://rentaprint.net/ref/{user.id}</p>
+            )}
+          </section>
+
           {/* Statistics Section */}
           <section className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded shadow p-6 space-y-4">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Account Statistics</h2>
