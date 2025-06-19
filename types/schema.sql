@@ -3,7 +3,7 @@
 create table if not exists bookings (
   id uuid primary key default gen_random_uuid(),
   printer_id uuid references printers(id),
-  clerk_user_id text,
+  clerk_user_id uuid,
   start_date timestamp with time zone,
   end_date timestamp with time zone,
   estimated_runtime_hours numeric,
@@ -44,7 +44,7 @@ create table if not exists patch_notes (
 -- Reviews Table
 create table if not exists reviews (
   id uuid primary key default gen_random_uuid(),
-  clerk_user_id text,
+  clerk_user_id uuid,
   printer_id uuid references printers(id),
   rating numeric,
   comment text,
