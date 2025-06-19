@@ -31,6 +31,8 @@ alter table printers add column if not exists is_under_maintenance boolean defau
 alter table printers add column if not exists min_runtime_hours numeric default 1;
 alter table printers add column if not exists max_runtime_hours numeric default 24;
 alter table printers add column if not exists cost_per_gram numeric default 0;
+alter table printers add column if not exists tipping_enabled boolean default false;
+alter table printers add column if not exists is_verified boolean default false;
 alter table printers add column if not exists tags text[];
 
 -- Patch Notes Table

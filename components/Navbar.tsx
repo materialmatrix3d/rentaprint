@@ -4,9 +4,12 @@ import Link from 'next/link';
 import ThemeToggle from '@/components/ThemeToggle';
 import AuthButtons from '@/components/AuthButtons';
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+import WhatsNewModal from '@/components/WhatsNewModal';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
   useEffect(() => {
     if (open) {
       document.body.classList.add('overflow-hidden');
@@ -39,14 +42,30 @@ export default function Navbar() {
             open ? 'translate-x-0' : '-translate-x-full'
           } sm:translate-x-0 fixed sm:static inset-y-0 left-0 w-64 sm:w-auto bg-gray-100 dark:bg-gray-900 p-4 sm:p-0 flex flex-col sm:flex-row gap-4 z-20 transition-transform`}
         >
-          <Link href="/printers">Printers</Link>
-          <Link href="/printers/new">New Listing</Link>
-          <Link href="/bookings">My Bookings</Link>
-          <Link href="/owner">Owner Panel</Link>
-          <Link href="/my-printers">My Printers</Link>
-          <Link href="/patch-notes">Patch Notes</Link>
-          <Link href="/roadmap">Roadmap</Link>
-          <Link href="/profile">Profile</Link>
+          {[
+            { href: '/printers', label: 'Printers' },
+            { href: '/printers/new', label: 'New Listing' },
+            { href: '/bookings', label: 'My Bookings' },
+            { href: '/owner', label: 'Owner Panel' },
+            { href: '/my-printers', label: 'My Printers' },
+            { href: '/marketplace', label: 'Marketplace' },
+            { href: '/patch-notes', label: 'Patch Notes' },
+            { href: '/roadmap', label: 'Roadmap' },
+            { href: '/profile', label: 'Profile' },
+          ].map(link => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={
+                pathname === link.href
+                  ? 'font-semibold underline'
+                  : undefined
+              }
+            >
+              {link.label}
+            </Link>
+          ))}
+          <WhatsNewModal />
           <ThemeToggle />
           <AuthButtons />
         </div>

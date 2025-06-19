@@ -2,7 +2,7 @@
 
 import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 export default function NewPrinterPage() {
@@ -16,8 +16,24 @@ export default function NewPrinterPage() {
     cost_per_gram: '',
     tags: '',
     description: '',
+    tipping_enabled: 'false',
   });
   const [status, setStatus] = useState('');
+  const [limitReached, setLimitReached] = useState(false);
+
+  useEffect(() => {
+    const checkLimit = async () => {
+      if (!user?.id) return;
+      const supabase = createClientComponentClient();
+      const { count } = await supabase
+        .from('printers')
+        .select('id', { count: 'exact', head: true })
+        .eq('clerk_user_id', user.id)
+        .eq('is_deleted', false);
+      if ((count || 0) >= 1) setLimitReached(true);
+    };
+    checkLimit();
+  }, [user]);
 
   if (!isSignedIn) {
     return (
@@ -39,6 +55,11 @@ export default function NewPrinterPage() {
     e.preventDefault();
     setStatus('Submitting...');
 
+    if (limitReached) {
+      setStatus('Free listing limit reached. Upgrade to add more.');
+      return;
+    }
+
     if (!isLoaded || !user) {
       setStatus('You must be logged in.');
       return;
@@ -58,6 +79,7 @@ export default function NewPrinterPage() {
         .map(t => t.trim())
         .filter(Boolean),
       description: formData.description || null,
+      tipping_enabled: formData.tipping_enabled === 'true',
       is_available: true,
     }]);
 
@@ -74,6 +96,7 @@ export default function NewPrinterPage() {
         cost_per_gram: '',
         tags: '',
         description: '',
+        tipping_enabled: 'false',
       });
     }
   };
@@ -83,6 +106,11 @@ export default function NewPrinterPage() {
   return (
     <div className="p-4 max-w-xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Create a Printer Listing</h1>
+      {limitReached && (
+        <p className="p-2 bg-yellow-200 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded mb-2">
+          Free listing limit reached. Upgrade to add more printers.
+        </p>
+      )}
       <form onSubmit={handleSubmit} className="space-y-4">
         <input name="make_model" value={formData.make_model} onChange={handleChange} placeholder="Creality Ender 3" required className={inputClass} />
         <input name="printer_name" value={formData.printer_name} onChange={handleChange} placeholder="Printer Nickname" required className={inputClass} />
@@ -92,6 +120,20 @@ export default function NewPrinterPage() {
         <input name="cost_per_gram" type="number" value={formData.cost_per_gram} onChange={handleChange} placeholder="Cost per gram (e.g. 0.05)" required className={inputClass} />
         <input name="tags" value={formData.tags} onChange={handleChange} placeholder="Tags (comma separated)" className={inputClass} />
         <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Printer details (optional)" className={inputClass} />
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            name="tipping_enabled"
+            checked={formData.tipping_enabled === 'true'}
+            onChange={e =>
+              setFormData(prev => ({
+                ...prev,
+                tipping_enabled: e.target.checked ? 'true' : 'false',
+              }))
+            }
+          />
+          Enable tipping
+        </label>
         <button type="submit" className="bg-blue-600 text-gray-900 dark:text-white px-4 py-2 rounded">Submit</button>
         <p className="text-sm text-gray-600">{status}</p>
       </form>

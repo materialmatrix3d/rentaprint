@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { CheckCircle } from 'lucide-react';
 import type { Printer } from '@/lib/data';
 
 interface Props {
@@ -38,7 +39,10 @@ export default function PrinterCard({ printer, onEdit, onDelete, selectable, sel
         )}
       </div>
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-        {printer.name}
+        {printer.name}{' '}
+        {printer.is_verified && (
+          <CheckCircle className="inline-block w-4 h-4 text-green-600" aria-label="Verified Printer" />
+        )}
       </h2>
 
       <div className="text-sm text-gray-800 dark:text-gray-100">

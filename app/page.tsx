@@ -5,6 +5,17 @@ import { motion } from "framer-motion";
 import { Printer, User, UploadCloud, Search, Star } from "lucide-react";
 import { IconPrinter } from "@tabler/icons-react";
 
+export const metadata = {
+  title: "RentAPrint - Book 3D Printers",
+  description:
+    "Rent 3D printers by the hour or list your own to earn extra income.",
+  openGraph: {
+    title: "RentAPrint - Book 3D Printers",
+    description:
+      "Rent 3D printers by the hour or list your own to earn extra income.",
+  },
+};
+
 
 
 export default function Home() {
@@ -26,7 +37,7 @@ export default function Home() {
           />
         </div>
         <div className="grid md:grid-cols-2 gap-y-8 gap-x-8 md:gap-x-12 items-center">
-          <div className="space-y-6 text-center md:text-left pl-6 pr-4 md:px-12">
+          <div className="space-y-6 text-center px-6">
             <h1 className="text-4xl md:text-5xl font-bold">
               Rent 3D Printers Near You — Fast, Flexible, On-Demand.
             </h1>
@@ -57,7 +68,10 @@ export default function Home() {
               transition={{ delay: 0.2, duration: 0.8 }}
               className="w-64 h-64 md:w-80 md:h-80 flex items-center justify-center rounded-2xl shadow-xl mx-auto mt-8 md:mt-0"
             >
-              <IconPrinter className="w-28 h-28 md:w-40 md:h-40 text-blue-400" />
+              <IconPrinter
+                aria-label="3D printer icon"
+                className="w-28 h-28 md:w-40 md:h-40 text-blue-400"
+              />
             </motion.div>
           </div>
         </div>

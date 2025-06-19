@@ -55,6 +55,11 @@ export default function PrinterDetailPage() {
 
   return (
     <div className="p-6 text-gray-900 dark:text-white max-w-xl space-y-2">
+      <nav className="text-sm mb-2">
+        <Link href="/" className="underline">Home</Link> &gt;{' '}
+        <Link href="/printers" className="underline">Printers</Link> &gt;{' '}
+        <span>{printer.name}</span>
+      </nav>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
         <h1 className="text-2xl font-bold">
           {printer.name}{' '}
