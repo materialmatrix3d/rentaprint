@@ -37,14 +37,23 @@ export async function fetchAdminStats() {
 
 export async function fetchAllPrinters() {
   const supabase = createAdminClient()
-  const { data, error } = await supabase
+
+  let { data, error } = await supabase
     .from('printers')
     .select('*')
     .order('created_at', { ascending: false })
+
+  if (error?.code === '42703') {
+    const fallback = await supabase.from('printers').select('*')
+    data = fallback.data
+    error = fallback.error
+  }
+
   if (error) {
     console.error('Error fetching printers', error)
     return []
   }
+
   return data || []
 }
 
