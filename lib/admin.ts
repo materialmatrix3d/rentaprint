@@ -41,7 +41,10 @@ export async function fetchAllPrinters() {
     .from('printers')
     .select('*')
     .order('created_at', { ascending: false })
-  if (error) throw new Error(error.message)
+  if (error) {
+    console.error('Error fetching printers', error)
+    return []
+  }
   return data || []
 }
 

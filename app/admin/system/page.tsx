@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { listAppRoutes } from '@/lib/listRoutes'
 import ApiTester from '@/components/admin/ApiTester'
+import SystemConsole from '@/components/admin/SystemConsole'
 
 export default async function AdminSystemPage() {
   const routes = await listAppRoutes()
@@ -46,6 +47,11 @@ export default async function AdminSystemPage() {
       <section>
         <h2 className="text-xl font-bold mb-2">API Test</h2>
         <ApiTester />
+      </section>
+
+      <section>
+        <h2 className="text-xl font-bold mb-2">System Console</h2>
+        <SystemConsole />
       </section>
     </div>
   )
